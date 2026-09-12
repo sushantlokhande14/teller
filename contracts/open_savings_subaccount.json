@@ -1,0 +1,15 @@
+{
+  "id": "open_savings_subaccount",
+  "title": "Open a new savings sub-account for a member",
+  "description": "Opens a new Savings sub-account for an existing member in Meridian with the given nickname and initial deposit, confirms it, and returns the new account number. This posts a change to the core; the confirm step is risky and needs sign-off.",
+  "goal": "For member {member_id}, open a new Savings sub-account with the nickname {nickname} and an initial deposit of {deposit}. Confirm it and read the new account number from the confirmation screen.",
+  "entry": "/main/home",
+  "inputs": {
+    "member_id": {"type": "integer", "description": "Member number as printed on the member card", "pattern": "^\\d{6}$"},
+    "nickname": {"type": "string", "description": "Friendly name for the new sub-account"},
+    "deposit": {"type": "money", "description": "Initial deposit in dollars, e.g. 25.00"}
+  },
+  "outputs": {
+    "account_number": {"type": "string", "description": "The new sub-account number shown on the confirmation screen"}
+  }
+}

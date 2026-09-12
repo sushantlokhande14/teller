@@ -1,0 +1,8 @@
+{
+  "note": "password expiry alert; chose Remind Me Later so the run can continue",
+  "resume_from": "verify",
+  "main_frame": ["main"],
+  "actions": [
+    {"click": {"role": "button", "name": "Remind Me Later", "frame": ["main"]}}
+  ]
+}

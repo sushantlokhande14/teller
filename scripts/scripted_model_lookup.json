@@ -1,0 +1,8 @@
+[
+  {"tool": "click", "by": {"role": "link", "name": "Member Lookup"}, "args": {"why": "open the member lookup form"}},
+  {"tool": "type", "by": {"role": "textbox", "name": "Member Number"}, "args": {"text": "{member_id}", "why": "enter the member number"}},
+  {"tool": "click", "by": {"role": "button", "name": "Search"}, "args": {"why": "run the search"}},
+  {"tool": "extract", "by": {"role": "cell", "row": "Name"}, "args": {"name": "member_name", "why": "the Name row holds the full name"}},
+  {"tool": "extract", "by": {"role": "cell", "column": "Current Balance", "row_contains": "Savings"}, "args": {"name": "savings_balance", "why": "Current Balance of the Savings row"}},
+  {"tool": "done", "args": {"summary": "found the member and read the savings balance"}}
+]

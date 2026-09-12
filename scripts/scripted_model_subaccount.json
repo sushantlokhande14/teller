@@ -1,0 +1,13 @@
+[
+  {"tool": "click", "by": {"role": "link", "name": "Member Lookup"}, "args": {"why": "open the member lookup form"}},
+  {"tool": "type", "by": {"role": "textbox", "name": "Member Number"}, "args": {"text": "{member_id}", "why": "enter the member number"}},
+  {"tool": "click", "by": {"role": "button", "name": "Search"}, "args": {"why": "open the member profile"}},
+  {"tool": "click", "by": {"role": "link", "name": "New Sub-Account"}, "args": {"why": "start the sub-account form"}},
+  {"tool": "select", "by": {"role": "combobox", "name": "Product"}, "args": {"option": "Savings", "why": "the goal asks for a savings sub-account"}},
+  {"tool": "type", "by": {"role": "textbox", "name": "Nickname"}, "args": {"text": "{nickname}", "why": "enter the nickname"}},
+  {"tool": "type", "by": {"role": "textbox", "name": "Initial Deposit"}, "args": {"text": "{deposit}", "why": "enter the initial deposit"}},
+  {"tool": "click", "by": {"role": "button", "name": "Review"}, "args": {"why": "go to the review screen"}},
+  {"tool": "click", "by": {"role": "button", "name": "Confirm Open"}, "args": {"why": "the goal requires opening the account; this posts to the core"}},
+  {"tool": "extract", "by": {"role": "cell", "row": "Account Number"}, "args": {"name": "account_number", "why": "the confirmation screen shows the new number"}},
+  {"tool": "done", "args": {"summary": "opened the sub-account and read its number"}}
+]

@@ -1,0 +1,18 @@
+{
+  "id": "member_savings_balance",
+  "title": "Read a member's current savings balance",
+  "description": "Looks up a member by member number in Meridian and returns the current balance of their Savings account along with the member's name.",
+  "goal": "Look up member {member_id} and read the current balance of their Savings account and their full name.",
+  "entry": "/main/home",
+  "inputs": {
+    "member_id": {
+      "type": "integer",
+      "description": "Member number as printed on the member card",
+      "pattern": "^\\d{6}$"
+    }
+  },
+  "outputs": {
+    "savings_balance": {"type": "money", "description": "Current balance of the member's Savings account"},
+    "member_name": {"type": "string", "description": "The member's full name as shown on the profile"}
+  }
+}
