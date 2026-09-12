@@ -1,0 +1,30 @@
+# Summit Credit Union: a second institution running the same vendor product.
+#
+# Same Meridian codebase, configured and branded differently: its own instance, a
+# newer point release, a content frame the integrator renamed, a welcome banner
+# after sign-in, and one relabelled menu item. This file is the entire difference.
+# The capabilities are not touched.
+#
+#   python -m teller replay capabilities/member_savings_balance.json \
+#       --input member_id=101502 --tenant tenants/summit-credit-union.yaml
+#
+# Only the keys below override the base profile; conditions are matched by id, so a
+# tenant can replace a base condition or add a new one.
+
+base_url: http://127.0.0.1:5058
+version: "4.4.02"
+main_frame: [content]
+
+conditions:
+  - id: welcome_banner
+    kind: recoverable
+    when: {text: "Welcome to Summit Credit Union"}
+    then:
+      kind: dismiss
+      target:
+        describe: Continue button on this institution's welcome banner
+        role: button
+        name: Continue
+        frame: ["@main"]
+        locators:
+          - {strategy: role, value: Continue}

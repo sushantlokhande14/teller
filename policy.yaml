@@ -1,8 +1,9 @@
 # Guardrails for every run. Enforced before each action, in discovery and replay.
 
 allowed_origins:
-  - http://127.0.0.1:5057
+  - http://127.0.0.1:5057          # the base deployment
   - http://localhost:5057
+  - http://127.0.0.1:5058          # a second institution running the same product
 
 # Regexes on the URL path. Empty allowed_paths means any path on an allowed origin.
 allowed_paths: []
@@ -31,7 +32,8 @@ replay_step_timeout_ms: 10000
 
 discovery:
   max_steps: 25
-  step_timeout_ms: 10000
+  budget_s: 300          # wall clock for one discovery run
+  may_navigate: false    # the model clicks what it can see; it does not type URLs
 
 # Regexes applied to everything written to disk. Keep them tight: an early version of
 # the card pattern also matched the timestamp in run ids and scrubbed evidence paths.

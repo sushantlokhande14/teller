@@ -16,8 +16,8 @@ from typing import Any
 
 from teller import __version__
 from teller.policy import Policy, Redactor
-from teller.schema import (AppRef, Capability, Checkpoint, Locator, OutputSpec, ParamSpec, Provenance, Step,
-                           Target, Value, now_iso)
+from teller.schema import (MAIN_FRAME, AppRef, Capability, Checkpoint, Locator, OutputSpec, ParamSpec,
+                           Provenance, Step, Target, Value, now_iso)
 from teller.surface.base import Element, Observation
 
 LABEL_LIKE = re.compile(r"[A-Za-z][A-Za-z .,'&/\-]{1,60}")
@@ -68,12 +68,19 @@ class Extraction:
 
 
 class Canon:
-    """Replaces concrete input values with {name} placeholders. Longest values first,
-    so a value that contains another value is handled correctly."""
+    """Turns one concrete run into a reusable flow: input values become {name}
+    placeholders (longest first, so a value containing another is handled correctly),
+    server-generated path segments become wildcards, and the app's content frame is
+    referred to by role rather than by the name this instance happens to use."""
 
-    def __init__(self, inputs: dict[str, str], specs: dict[str, ParamSpec]) -> None:
+    def __init__(self, inputs: dict[str, str], specs: dict[str, ParamSpec],
+                 main_frame: list[str] | None = None) -> None:
         self.pairs = sorted(((v, k) for k, v in inputs.items() if v and len(v) >= 3), key=lambda p: -len(p[0]))
         self.specs = specs
+        self.main_frame = main_frame or []
+
+    def frame(self, path: list[str]) -> list[str]:
+        return [MAIN_FRAME] if list(path) == list(self.main_frame) else list(path)
 
     def __call__(self, s: str | None) -> str | None:
         if s is None:
@@ -140,7 +147,10 @@ def make_target(el: Element, obs: Observation, canon: Canon, describe: str | Non
             if key:
                 locs.append(Locator(strategy="table_cell", value=json.dumps({"row": key, "column": el.col_header}),
                                     note=f"the row containing '{key}', under the '{el.col_header}' column"))
-        if row:
+        # row_label means "the cell after the label", which is only the same thing as
+        # this cell in a two-column label/value table. In a grid it would point at a
+        # different column, so it must not become a silent fallback.
+        if row and len(el.row_cells) <= 2:
             locs.append(row)
         is_label_cell = not el.row_label or el.row_label == el.name
         if is_label_cell and LABEL_LIKE.fullmatch(el.name) and canon(el.name) == el.name and not el.col_header:
@@ -162,11 +172,12 @@ def make_target(el: Element, obs: Observation, canon: Canon, describe: str | Non
         locs.extend([css, bbox])
 
     what = describe or _describe(el, name, canon)
-    return Target(describe=what, role=el.role, name=name, frame=list(el.frame), locators=locs)
+    return Target(describe=what, role=el.role, name=name, frame=canon.frame(el.frame), locators=locs)
 
 
 def _describe(el: Element, name: str, canon: Canon) -> str:
-    where = f" in the {'/'.join(el.frame)} frame" if el.frame else ""
+    frame = canon.frame(el.frame)
+    where = " in the content frame" if frame == [MAIN_FRAME] else (f" in the {'/'.join(frame)} frame" if frame else "")
     if el.role in ("cell", "text"):
         if el.col_header:
             return f"the '{el.col_header}' cell of the row {canon(el.row_label)!r}{where}"
@@ -188,8 +199,9 @@ def derive_checkpoint(entry: TraceEntry, target: Target | None, canon: Canon, ti
 
 def build_capability(trace: list[TraceEntry], extractions: dict[str, Extraction], contract: Contract,
                      inputs: dict[str, str], profile_id: str, profile_version: str, run_id: str,
-                     model: str, policy: Policy, redactor: Redactor, endpoint: str | None = None) -> Capability:
-    canon = Canon(inputs, contract.inputs)
+                     model: str, policy: Policy, redactor: Redactor, endpoint: str | None = None,
+                     main_frame: list[str] | None = None) -> Capability:
+    canon = Canon(inputs, contract.inputs, main_frame)
     steps: list[Step] = []
     n = 0
     for entry in trace:

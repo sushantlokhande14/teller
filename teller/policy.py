@@ -29,7 +29,7 @@ class RiskyPolicy(BaseModel):
 
 class DiscoveryPolicy(BaseModel):
     max_steps: int = 25
-    step_timeout_ms: int = 10_000
+    budget_s: int = 300          # wall clock; a model that stalls must not hold a session open
     may_navigate: bool = False   # let the model type URLs instead of clicking what it sees
 
 

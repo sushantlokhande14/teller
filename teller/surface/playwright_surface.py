@@ -20,7 +20,7 @@ from urllib.parse import urlsplit
 from playwright.sync_api import Error as PlaywrightError
 from playwright.sync_api import Frame, sync_playwright
 
-from teller.schema import AppProfile, Locator as LocatorSpec, Target, now_iso
+from teller.schema import MAIN_FRAME, AppProfile, Locator as LocatorSpec, Target, now_iso
 from teller.surface.base import Element, Observation, Resolved
 
 HERE = Path(__file__).parent
@@ -100,14 +100,17 @@ def xpath_quote(s: str) -> str:
 
 class PlaywrightSurface:
     def __init__(self, profile: AppProfile, headed: bool = False, cdp_port: int | None = None,
-                 allow_bbox: bool = False, viewport: tuple[int, int] = (1280, 900)) -> None:
+                 allow_bbox: bool = False, viewport: tuple[int, int] = (1280, 900),
+                 video_dir: str | None = None) -> None:
         self.profile = profile
         self.allow_bbox = allow_bbox
         self.cdp_port = cdp_port
         self._pw = sync_playwright().start()
         args = [f"--remote-debugging-port={cdp_port}"] if cdp_port else []
         self._browser = self._pw.chromium.launch(headless=not headed, args=args)
-        self._ctx = self._browser.new_context(viewport={"width": viewport[0], "height": viewport[1]})
+        size = {"width": viewport[0], "height": viewport[1]}
+        extra = {"record_video_dir": video_dir, "record_video_size": size} if video_dir else {}
+        self._ctx = self._browser.new_context(viewport=size, **extra)
         self._ctx.add_init_script(CAPTURE_JS)
         self.page = self._ctx.new_page()
         self._status: int | None = None
@@ -145,6 +148,10 @@ class PlaywrightSurface:
         return self.frame_at(self.profile.main_frame) or self.page.main_frame
 
     def _frame_for(self, path: list[str]) -> Frame | None:
+        """Resolve a target's frame path. The symbolic ["@main"] means this profile's
+        content frame, whatever this tenant happens to call it."""
+        if path == [MAIN_FRAME]:
+            return self.main_frame()
         f = self.frame_at(path)
         if f is None and path == self.profile.main_frame:
             return self.page.main_frame

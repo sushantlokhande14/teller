@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c3" width="100%" cellpadding="6">
+<tr><td><font size="4"><b>{{ v.welcome }}</b></font></td></tr>
+<tr><td>You are signed in to member servicing. Contact the service desk on extension 4400 for help with this application.</td></tr>
+<form method="post" action="/main/welcome/ack">
+<input type="hidden" name="next" value="{{ next }}">
+<tr><td><input type="submit" value="Continue"></td></tr>
+</form>
+</table>
+{% endblock %}

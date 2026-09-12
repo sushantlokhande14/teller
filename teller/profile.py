@@ -41,9 +41,13 @@ def apply_overlay(base: dict[str, Any], overlay: dict[str, Any]) -> dict[str, An
 def load_profile(name: str, overlay: str | None = None) -> AppProfile:
     path = Path(name) if name.endswith((".yaml", ".yml")) else PROFILES_DIR / f"{name}.yaml"
     data = _read(path)
+    over: dict[str, Any] = {}
     if overlay:
-        data = apply_overlay(data, _read(Path(overlay)))
+        over = _read(Path(overlay))
+        data = apply_overlay(data, over)
+    # The environment can point the base profile at a different instance, but it must
+    # not silently outrank a tenant overlay that names its own instance.
     env_url = os.environ.get(f"{data['id'].upper()}_URL")
-    if env_url:
+    if env_url and "base_url" not in over:
         data["base_url"] = env_url
     return AppProfile.model_validate(data)

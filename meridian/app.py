@@ -17,9 +17,16 @@ import os
 from flask import (Flask, abort, jsonify, redirect, render_template, request,
                    session, url_for)
 
+from meridian.variants import current as current_variant
+
 app = Flask(__name__)
 app.secret_key = "meridian-dev-only-not-a-real-secret"
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+
+@app.context_processor
+def variant():
+    return {"v": current_variant()}
 
 USERS = {os.environ.get("MERIDIAN_USER", "operator1"): os.environ.get("MERIDIAN_PASS", "teller!23")}
 
@@ -74,8 +81,10 @@ def guard():
     if "user" not in session:
         return redirect(url_for("login", next=path))
     # Interstitials stay up until acknowledged, so they never go through take_fault().
-    if path.startswith(("/main/notice", "/main/surprise")):
+    if path.startswith(("/main/notice", "/main/surprise", "/main/welcome")):
         return None
+    if session.get("welcome_pending"):
+        return render_template("welcome.html", next=request.full_path.rstrip("?"))
     if take_fault("session_expired"):
         session.clear()
         return redirect(url_for("login", next=path, reason="timeout"))
@@ -112,6 +121,7 @@ def login():
         user = request.form.get("userid", "")
         if USERS.get(user) == request.form.get("password", ""):
             session["user"] = user
+            session["welcome_pending"] = bool(current_variant()["welcome"])
             return redirect(request.form.get("next") or "/")
         error = "Invalid user ID or password."
     return render_template("login.html", error=error, reason=reason,
@@ -206,6 +216,12 @@ def subaccount_done(member_id: str, number: str):
 @app.route("/main/reports")
 def reports():
     return render_template("denied.html", what="Reports"), 403
+
+
+@app.route("/main/welcome/ack", methods=["POST"])
+def welcome_ack():
+    session.pop("welcome_pending", None)
+    return redirect(request.form.get("next") or url_for("home"))
 
 
 @app.route("/main/notice/ack", methods=["POST"])

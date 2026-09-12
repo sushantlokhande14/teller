@@ -7,7 +7,7 @@
 {% endif %}
 <form method="post" action="/main/members/search">
 <tr><td width="160">Member Number</td><td><input type="text" name="memberno" size="12" value="{{ query }}"></td></tr>
-<tr><td></td><td><input type="submit" value="Search"> &nbsp; <input type="reset" value="Clear"></td></tr>
+<tr><td></td><td><input type="submit" value="{{ v.search_label }}"> &nbsp; <input type="reset" value="Clear"></td></tr>
 </form>
 <tr><td colspan="2"><font size="1" color="#666">Enter the numeric member number exactly as printed on the member card.</font></td></tr>
 </table>

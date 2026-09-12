@@ -104,7 +104,9 @@ def cmd_discover(args: argparse.Namespace) -> int:
     redactor = make_redactor(policy, contract.inputs, inputs, profile)
     log = RunLog(args.runs, new_run_id("discovery"), redactor)
     model = build_model(args)
-    surface = PlaywrightSurface(profile, headed=args.headed, cdp_port=args.cdp_port, allow_bbox=policy.coordinate_fallback)
+    surface = PlaywrightSurface(profile, headed=args.headed, cdp_port=args.cdp_port,
+                                allow_bbox=policy.coordinate_fallback,
+                                video_dir=log.path("video") if args.video else None)
     operator = start_operator(log.dir, args.operator, policy.handoff_timeout_s) if args.operator else None
     broker = ControlBroker(log.dir, surface, log, policy.handoff_timeout_s)
     print(f"run: {log.dir}")
@@ -115,7 +117,8 @@ def cmd_discover(args: argparse.Namespace) -> int:
             print(f"discovery {status}: {run.reason}")
             return 1
         cap = build_capability(run.trace, run.extractions, contract, inputs, profile.id, profile.version,
-                               log.run_id, model.name, policy, redactor, getattr(model, "base_url", None))
+                               log.run_id, model.name, policy, redactor, getattr(model, "base_url", None),
+                               profile.main_frame)
         out = Path(args.out) / f"{cap.id}.json"
         out.parent.mkdir(parents=True, exist_ok=True)
         cap.save(str(out))
@@ -145,7 +148,9 @@ def cmd_replay(args: argparse.Namespace) -> int:
             set_fault(profile.base_url, kind, mode or "once")
             log.event("fault.injected", kind=kind, mode=mode or "once")
     cdp_port = args.cdp_port or (9333 if args.operator else None)
-    surface = PlaywrightSurface(profile, headed=args.headed, cdp_port=cdp_port, allow_bbox=policy.coordinate_fallback)
+    surface = PlaywrightSurface(profile, headed=args.headed, cdp_port=cdp_port,
+                                allow_bbox=policy.coordinate_fallback,
+                                video_dir=log.path("video") if args.video else None)
     operator = start_operator(log.dir, args.operator, policy.handoff_timeout_s) if args.operator else None
     broker = ControlBroker(log.dir, surface, log, policy.handoff_timeout_s)
     print(f"run: {log.dir}")
@@ -214,6 +219,7 @@ def build_parser() -> argparse.ArgumentParser:
         sp.add_argument("--headed", action="store_true", help="show the browser")
         sp.add_argument("--cdp-port", type=int, default=None, help="expose the browser for operator attach")
         sp.add_argument("--operator", default=None, help="scripted operator json, run in a separate process")
+        sp.add_argument("--video", action="store_true", help="record the session to <run>/video/")
 
     d = sub.add_parser("discover", help="LLM-driven run that records a capability")
     d.add_argument("contract")

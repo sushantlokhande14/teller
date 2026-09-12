@@ -19,9 +19,12 @@ def test_overlay_overrides_base_url_and_prepends_conditions(tmp_path: Path):
         "    when: {text: 'Branch is closed'}\n",
         encoding="utf-8")
     import os
-    os.environ.pop("MERIDIAN_URL", None)
-    p = load_profile("meridian", str(overlay))
-    assert p.base_url == "http://tenant.example:8080"
+    os.environ["MERIDIAN_URL"] = "http://from-the-environment:1234"
+    try:
+        p = load_profile("meridian", str(overlay))
+    finally:
+        os.environ.pop("MERIDIAN_URL", None)
+    assert p.base_url == "http://tenant.example:8080", "an overlay's instance outranks the environment"
     assert p.version == "4.2.9"
     ids = [c.id for c in p.conditions]
     assert ids[:2] == ["session_expired", "branch_closed"]

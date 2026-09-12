@@ -316,7 +316,10 @@ class DiscoveryRun:
         obs = self._observe(0)
         self.messages.append(self._user_turn(obs))
         system = self._system()
+        deadline = time.monotonic() + self.policy.discovery.budget_s
         for step in range(1, self.policy.discovery.max_steps + 1):
+            if time.monotonic() > deadline:
+                return self._finish("failed", f"time budget of {self.policy.discovery.budget_s}s exhausted")
             self._trim_images()
             t0 = time.monotonic()
             decision = self.model.decide(system, self.messages, obs, self.tools)

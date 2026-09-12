@@ -45,11 +45,19 @@ class Locator(BaseModel):
     note: str = ""
 
 
+MAIN_FRAME = "@main"   # "wherever this app profile says the content lives"
+
+
 class Target(BaseModel):
     """A control on the surface, described by what a human sees, with fallbacks.
 
     `frame` is the path of frame names from the top document ([] means the top
     document itself). Legacy apps live in framesets, so this is part of identity.
+
+    The single entry ["@main"] means the content frame named by the app profile,
+    rather than a frame literally called "main". A capability refers to the frame
+    by its role so a tenant that renamed or re-nested its content frame is an
+    overlay change rather than a re-recording.
     """
 
     describe: str
