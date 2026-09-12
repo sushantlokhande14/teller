@@ -18,7 +18,7 @@ auth:
     describe: User ID field on the sign-in form
     role: textbox
     name: User ID
-    frame: [main]
+    frame: ["@main"]
     locators:
       - {strategy: role, value: User ID}
       - {strategy: row_label, value: User ID}
@@ -26,7 +26,7 @@ auth:
     describe: Password field on the sign-in form
     role: textbox
     name: Password
-    frame: [main]
+    frame: ["@main"]
     locators:
       - {strategy: row_label, value: Password}
       - {strategy: css, value: "input[type=password]"}
@@ -34,7 +34,7 @@ auth:
     describe: Sign In button
     role: button
     name: Sign In
-    frame: [main]
+    frame: ["@main"]
     locators:
       - {strategy: role, value: Sign In}
   signed_in_check:
@@ -56,7 +56,7 @@ conditions:
         describe: Acknowledge button on the system notice
         role: button
         name: Acknowledge
-        frame: [main]
+        frame: ["@main"]
         locators:
           - {strategy: role, value: Acknowledge}
 
