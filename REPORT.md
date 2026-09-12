@@ -2,18 +2,35 @@
 
 ## 1. Architecture
 
-One Python process per run, five modules with a clear order of dependency, and a
-directory on disk as the only shared state between processes.
+One Python process per run, and a directory on disk as the only shared state between
+processes. The shape of the system is one idea: a model runs on the left of the
+artifact and never on the right.
 
+```mermaid
+flowchart LR
+    subgraph ONCE["run once, with a model"]
+        C["<b>contract.json</b><br/>goal, typed inputs,<br/>typed outputs"] --> A["<b>agent.py</b><br/>observe,<br/>decide, act"] --> R["<b>recorder.py</b><br/>locators, checkpoints,<br/>parameters"]
+    end
+
+    R --> K["<b>capabilities/id.json</b><br/>reviewed, approved,<br/>fingerprinted"] --> P
+
+    subgraph MANY["run every time after, with no model"]
+        P["<b>replay.py</b><br/>resolve, act,<br/>verify, classify"] --> O["<b>result</b><br/>success, business<br/>outcome, or failure"]
+    end
+
+    A -.-> S["<b>surface/</b><br/>perceive and act on one screen<br/>Playwright today,<br/>an accessibility API next"]
+    P -.-> S
+    S <--> APP[("the target app<br/>frameset, table<br/>layout, no ids")]
+
+    classDef art fill:#e3f4e6,stroke:#2e7d32,stroke-width:3px,color:#111
+    classDef seam fill:#e4edfb,stroke:#4a7ebb,color:#111
+    class K art
+    class S,APP seam
 ```
-contract.json  ->  agent.py (the LLM)  ->  recorder.py  ->  capabilities/<id>.json
-                        |                                          |
-                   surface/ (Playwright)  <----------------  replay.py (no model)
-                        |                                          |
-                   policy.py (allowlist, risk, redaction)     handoff.py <-> operator.py
-                        |
-                   evidence.py (runs/<id>/log.jsonl, screens/, snapshots/, result.json)
-```
+
+Three things wrap both loops and are deliberately not drawn: `policy.py` checks every
+action before it happens, `evidence.py` records every action after it, and
+`handoff.py` can take the session away from either loop and give it to a person.
 
 **The contract comes first.** Before discovery runs, the caller declares what the
 capability is for: a goal in plain language, typed inputs, typed outputs. The model
@@ -32,36 +49,33 @@ button text, and for legacy table forms the text of the cell before it) and neve
 uses ids, classes or test hooks for identity. Models that accept images also get a
 screenshot with the same numbers drawn on it.
 
-**The model is a seam, not a dependency.** `Model` is a protocol with one method,
-with three implementations: Anthropic, any OpenAI-compatible endpoint (local Ollama,
-a hosted tier, OpenAI), and a scripted stand-in so the end-to-end tests are
-deterministic and need no network. One canonical transcript format is translated per
-provider, so the recorder, the redaction and the evidence see the same thing
-whichever model drove the run. This began as a constraint, since I had no API budget,
-and turned out to be the right shape anyway: a bank is unlikely to accept one
-hard-wired vendor for the component driving its core systems, and the cheapest model
-that can finish discovery is the right one, because no model is in the production
-path at all. The evidence here was produced by **qwen2.5:7b running locally through
-Ollama**, recorded in each capability's `provenance.model` and `provenance.endpoint`.
-A 7B model is weaker than I would use in production, which turned out to be useful
-(section 3).
+**The model is a seam, not a dependency.** `Model` is a protocol with one method and
+three implementations: Anthropic, any OpenAI-compatible endpoint, and a scripted
+stand-in that keeps the end-to-end tests deterministic and offline. One canonical
+transcript is translated per provider, so recorder, redaction and evidence see the
+same thing whichever model drove the run. This started as a constraint, since I had no
+API budget, and is the right shape regardless: a bank will not hard-wire one model
+vendor into the component driving its core, and since no model is in the production
+path, the cheapest one that can finish discovery is the correct choice. The evidence
+here was produced by **qwen2.5:7b running locally through Ollama**, recorded in each
+capability's `provenance`. That is weaker than I would use in production, which turned
+out to be useful (section 3).
 
-**Code handles the known, the model handles the unknown.** Interstitials the app
-profile already knows about are handled during discovery by the same code path replay
-uses, before the model is asked. The model spends its turns on the task, and the
-recording does not contain "click Acknowledge" as a step.
+**Code handles the known, the model handles the unknown.** Interstitials the profile
+already knows about are handled during discovery by the same code path replay uses,
+before the model is asked, so the model spends its turns on the task and the recording
+does not contain "click Acknowledge" as a step.
 
 **A directory is the bus.** A run directory holds the log, screenshots, snapshots, the
 result, and during a handoff the intervention request and reply. The operator CLI is a
 separate process that reads that directory and attaches to the live browser over CDP.
 No queue, no service, and a person could do the operator's job with a text editor.
 
-Deliberate trade-offs: Playwright because role-based locators are the closest thing to
-"what a person sees" a browser offers; a single process because the brief says scaling
-infrastructure is not the point; a local sample app (`meridian/`) rather than a public
-site, because I wanted framesets, table layouts, quirks mode, injectable session expiry,
-permission denials, slow loads and application errors, and a second deployment of the
-same product to test reuse against.
+Deliberate trade-offs: Playwright, because role-based locators are the closest a
+browser comes to "what a person sees"; one process, because the brief says scaling
+infrastructure is not the point; and a local sample app rather than a public site,
+because I wanted framesets, table layouts, quirks mode, injectable runtime faults, and
+a second deployment of the same product to test reuse against.
 
 ## 2. Artifact schema
 
@@ -73,28 +87,35 @@ checkpoint, capability-specific `outcomes`, and `provenance`.
 
 **Targets carry several locators, in order of trust.** A `Target` describes a control
 the way a person would (`describe`, `role`, `name`, `frame`) plus ordered `Locator`
-strategies. The recorder picks the order from where the name actually came from: a
-control named by a real label gets `role` first; one named by the cell before it, how
-legacy forms are built, gets `row_label` first, because Playwright's accessible-name
-computation will not see that label and a `role` lookup would miss. Table cells get a
-`table_cell` locator (the row containing "Savings", under the "Current Balance"
-column), which is how one capability found Elena's balance in a different row than
-Priya's. A structural CSS path and the screen position come last, labelled brittle,
-and the position is used only if policy allows coordinate fallback. Every locator
-carries a `note` saying why it should hold.
+strategies, each with a `note` saying why it should hold. The recorder picks the order
+from where the control's name actually came from, because that determines which lookup
+can find it again.
+
+| strategy | how it finds the control | the recorder puts it first when |
+|---|---|---|
+| `role` | ARIA role plus accessible name, the way a screen reader finds it | the control has a real label or its own text |
+| `row_label` | the control in the row whose first cell reads X | the name came from the cell before it, which is how legacy table forms are built and which an accessible-name lookup will not see |
+| `table_cell` | the cell under column X, in the row containing Y | the target is a data cell in a grid |
+| `label`, `placeholder`, `text` | the obvious ones | the name came from that attribute |
+| `css` | a structural path | never; it is the labelled-brittle last resort |
+| `bbox` | the screen position at recording time | never; off unless policy enables coordinate fallback |
+
+`table_cell` is why one capability reads Priya's balance from the first row and Elena's
+from the second without knowing either. `css` earns its place only as the thing that
+keeps a run alive long enough to report drift, which is exactly what it did on the
+cross-tenant run in section 4.
 
 **Every step has a checkpoint.** `expect` says what must be true afterwards: URL
 pattern, visible heading, text fragments, or a control that must be visible. Replay
 never assumes a click worked. Steps also record `on_url`, the page they were recorded
 on, which is what makes recovery possible.
 
-**Values are parameterized, not stored.** A `type` step's value is a literal or
-`{"param": "member_id"}`. The recorder swaps concrete input values for `{name}` in
-values, URL patterns, headings and descriptions, then turns any path segment still
-carrying digits into `*`, because a segment we never supplied (an account number the
-server just generated) differs next time. I found that the hard way: the first
-sub-account replay failed its final checkpoint on the recorded account number. The
-heading check still guards the state.
+**Values are parameterized, not stored.** The recorder swaps concrete input values for
+`{name}` in step values, URL patterns, headings and descriptions, then turns any path
+segment still carrying digits into `*`, because a segment we never supplied, such as an
+account number the server just generated, differs next time. I found that the hard way:
+the first sub-account replay failed its final checkpoint on the recorded account number.
+The heading check still guards the state.
 
 **Outputs are typed and say where they come from:** a type, a description for the
 calling agent, a `source` target, and a `parse` rule. Money comes back as a decimal
@@ -122,65 +143,65 @@ Replay is a fixed loop with no branch decided by a model:
    condition appears;
 6. if it fails, classify the screen.
 
-The taxonomy is data, not code. A `Condition` has a detector (URL regex, text regex,
-HTTP status, a visible control), a kind, and for recoverable ones a handler. The
-result contract keeps the three kinds apart: `outcome` is a legitimate answer with a
-code and the message from the screen (`not_found`, `validation_error`,
-`permission_denied`); `recoverable` is handled and the step continues
-(`session_expired` re-signs in, `system_notice` is dismissed, `host_busy` waits);
-`fatal` stops with a screenshot, a snapshot, the step, what was expected and what was
-observed. Anything unmatched is an unknown state and goes to a person (section 5).
+The taxonomy is data, not code. A `Condition` is a detector (URL regex, text regex,
+HTTP status, a visible control), a kind, and for recoverable ones a handler. The kinds
+are what the result contract keeps apart, because conflating the first two is the
+mistake that makes a caller treat a legitimate answer as an outage.
+
+| kind | what it means | what replay does | in the sample app |
+|---|---|---|---|
+| `outcome` | the app answered, and the answer is news the caller needs | stops and returns a code plus the message from the screen | `not_found`, `validation_error`, `permission_denied` |
+| `recoverable` | something got in the way that is not about this task | applies the handler, re-checks, carries on, and says so in the result | `session_expired` re-signs in, `system_notice` is dismissed, `host_busy` waits |
+| `fatal` | the app broke | stops with the step, what was expected, what was observed, a screenshot and a page snapshot | `app_error` |
+| unmatched | nobody has seen this screen before | hands the live session to a person (section 5) | the password expiry alert |
+
 Conditions live in the app profile, because "No member found" is knowledge about
-Meridian rather than about one capability; a capability may add its own, checked first.
+Meridian rather than about one capability. A capability may add its own, checked first.
 
-Recovery has a deliberate unit of retry: the *page group*, the run of steps recorded
-on the same URL. Form state lives on a page, so after a recovery that moved us off it
-the engine returns and re-runs the group from its first step, with a bound. Where the
-recovery itself completed the step, the engine notices and moves on. Every retry,
-recovery and drift lands in `StepResult`, so a result says not just "success" but
-"success, after re-authenticating at step 1".
+Recovery retries a *page group*, the run of steps recorded on the same URL, not a
+single step. Form state lives on a page, so a recovery that moved us off it invalidates
+the half-filled form behind us; the engine returns to the page and re-runs the group
+from its first step, with a bound. Every retry, recovery and drift lands in
+`StepResult`, so a result says not just "success" but "success, after re-authenticating
+at step 1".
 
-**What a weak model exposed.** The 7B completed the three-step read flow first time.
-On the nine-step write flow it failed twice, and both failures were my design's fault:
+**What a weak model exposed.** The 7B finished the three-step read flow first time. On
+the nine-step write flow it failed twice, and both failures were my design's fault:
 
-* It reached for the `navigate` tool and guessed a URL instead of clicking the link
-  two lines above it in the listing, so `navigate` is now withheld from discovery by
-  default (`discovery.may_navigate`). The argument is not that a small model misused
-  it: a recorded URL hop is the least portable thing a flow can contain, since paths
-  are exactly what differs between tenants and versions, and a flow that clicks what a
-  person clicks survives that. It stays available as a policy flag for genuinely
-  unreachable deep links.
-* It clicked ref 1 ("Home", in the navigation frame) when it wanted a link in the
-  content frame, because a frameset's menu occupied the first ref numbers on every
-  screen. Observations are now ordered controls before text and content frame first,
-  split into "controls you can act on" and "text and table cells", which mirrors how a
-  screen reader user moves through a page.
+* It reached for the `navigate` tool and guessed a URL instead of clicking the link two
+  lines above it in the listing. `navigate` is now withheld from discovery by default
+  (`discovery.may_navigate`). The argument is not that a small model misused it: a
+  recorded URL hop is the least portable thing a flow can contain, because paths are
+  exactly what differs between tenants and versions. It stays behind a policy flag for
+  genuinely unreachable deep links.
+* It clicked ref 1, "Home" in the navigation frame, when it wanted a link in the content
+  frame, because a frameset's menu was occupying the first ref numbers on every screen.
+  Observations now list controls before text and the content frame first, which mirrors
+  how a screen reader user moves through a page and helps any model.
 
-I would rather report that than re-run quietly until a transcript looked clean. Two
-bugs I also introduced and fixed, both now pinned by tests: a loose validation
-detector matched "Passwords must be changed every 90 days" on the password alert and
-called it a validation outcome, and the card-number redaction pattern matched the
-timestamp in run ids, scrubbing evidence paths out of results.
+I would rather report that than quietly re-run until a transcript looked clean. Two
+bugs I introduced and fixed are pinned by tests for the same reason: a loose detector
+read "Passwords must be changed every 90 days" as a validation outcome, and the
+card-number redaction pattern matched the timestamp in run ids and scrubbed evidence
+paths out of results.
 
 Drift is secondary here, as the brief says, but the artifact is built for it: several
-locators per target, `drift` flagged per step, and `locator_used` recorded, so a fleet
-could see which capabilities are one locator away from breaking before they break.
+locators per target, and `drift` plus `locator_used` recorded per step, so a fleet can
+see which capabilities are one locator away from breaking before they break.
 
 ## 4. Heterogeneity & multi-tenant
 
 **Surface abstraction.** The seam is `Surface` plus the shape of `Target`. A target
-states role, name, frame path and strategies; a surface decides which it can honour.
-Legacy web is the case I built against: framesets (the content frame is named in the
-profile, every target carries its frame path), table layouts (`row_label`,
-`table_cell`), no ids, quirks mode (headings detected by being bold and larger than
-surrounding text, not by tag). A desktop app implements the same protocol over an
-accessibility API such as UI Automation: `role` and `name` map onto accessibility
-roles and names, `frame` becomes the window or pane path, `table_cell` becomes a grid
-pattern lookup, and `bbox` becomes first-class rather than a last resort. The
-perception script becomes a tree walk; recorder, replay, policy, handoff and evidence
-do not change. The one genuinely new idea a desktop surface needs is checkpoints:
-`url` means nothing there, so the surface would expose a window-title-plus-heading
-signature and `Checkpoint` would grow one optional field.
+states role, name, frame path and strategies; a surface decides which of those it can
+honour. Legacy web is the case I built against: framesets, table layouts, no ids, and
+quirks mode, where a heading is detected by being bold and larger than the text around
+it rather than by tag. A desktop app implements the same protocol over an accessibility
+API such as UI Automation: `role` and `name` map onto accessibility roles and names,
+`frame` becomes the window or pane path, `table_cell` becomes a grid pattern lookup, and
+`bbox` becomes first-class rather than a last resort. The perception script becomes a
+tree walk, and recorder, replay, policy, handoff and evidence do not change. The one
+genuinely new idea it needs is checkpoints, since `url` means nothing there: the surface
+would expose a window-title-and-heading signature, and `Checkpoint` grows one field.
 
 **Multi-tenant reuse.** Three layers, each smaller than the one above:
 
@@ -198,25 +219,33 @@ instance happens to use, so an integrator who renamed or re-nested that frame is
 overlay line, not a re-recording. That symbolic reference is the smallest change that
 made the tenant story real rather than asserted.
 
-This is demonstrated rather than argued: the sample app also runs as Summit Credit
-Union, a second institution on the same product with its own branding, release 4.4.02,
-a content frame named `content`, a welcome banner after sign-in, and one renamed menu
-item. `evidence/replay-second-tenant/` is the capability recorded against the base
-deployment, replayed unchanged against Summit. The overlay absorbs the host, the frame
-name and the banner. The renamed menu item is absorbed one level down, by the locator
-fallbacks: the role and text locators miss, a structural locator holds, and the result
-marks that step `drift` with `locator_used: css`. That is the signal worth acting on.
-It says this tenant is running on a last-resort locator and needs an overlay entry
-before the structure moves, rather than waiting for a production break to find out.
-Across many tenants the thing to collect per (capability, tenant, version) is exactly
-that pair, which strategy was used and how often a fallback was needed. The fields are
-in every result today; the storage and reporting around them are not built.
+This is demonstrated rather than argued. The sample app also runs as Summit Credit
+Union: the same product with its own branding, release 4.4.02, a content frame named
+`content`, a welcome banner, and one renamed menu item.
+`evidence/replay-second-tenant/` is the capability recorded against the base
+deployment, replayed against Summit untouched. The overlay absorbs the host, the frame
+name and the banner. The renamed menu item is absorbed a level lower by the locator
+fallbacks: role and text miss, the structural locator holds, and the result marks that
+step `drift` with `locator_used: css`. That pairing is the signal worth collecting per
+capability, tenant and version, because it says this tenant is one last-resort locator
+away from breaking and needs an overlay entry now rather than after an outage. The
+fields are in every result today; nothing aggregates them yet.
 
 ## 5. Escalation & handoff
 
 One live session per run, one controller at a time, and `ControlBroker` owns that
 fact. Automation refuses to act while a person holds the session, and the state is
 written to `control.json` so anyone can see who is in control.
+
+```mermaid
+stateDiagram-v2
+    direction LR
+    [*] --> Automation
+    Automation --> Human: unknown screen, risky step, or the model gave up
+    Human --> Automation: resumed as verify, next_step, or retry_step
+    Human --> [*]: aborted, or no reply before the timeout
+    Automation --> [*]: success, business outcome, or failure
+```
 
 **Detecting stuck.** Three explicit triggers: replay hit a screen no condition matches
 (after retries and the checkpoint timeout); a risky step needs sign-off; the model
@@ -277,28 +306,25 @@ operator can.
 
 ## 7. Cuts
 
-* **Desktop surface.** Designed for (section 4), not implemented.
-* **Tenant fleet tooling.** Overlays and the per-step drift signal exist and are
-  demonstrated on a second institution; storing and reporting those signals across many
-  runs does not.
-* **Operator console.** A terminal plus CDP. A web console would read the same files
-  and attach to the same endpoint.
-* **Screenshot masking**, as described in section 6.
-* **Path minimization.** A model's detour is recorded as steps. The artifact is
-  reviewable so a person can prune, and I would rather show the real path than
-  silently edit it; automatic minimization (drop a step, replay, keep the drop if the
-  checkpoints hold) is the obvious next feature.
-* **Rescuing a discovery run.** When a person takes over a stuck discovery, their
-  steps are logged but not folded into the capability, so a rescued run would have a
-  hole in it. The run is marked failed instead, which is the safe behaviour; deriving
-  recorded steps from captured human actions is real work, not a tweak.
-* **Assisted fallback.** No bounded LLM recovery on replay failure. The handoff path
-  covers those situations with a person, which I think is the right default for a
-  bank; a single-step model recovery would plug in where `_unknown_state` calls the
-  broker.
-* **Stability scoring.** Replaying N times for a flakiness signal is a loop around what
-  exists; not built.
+Each of these is a stop with the seam left in place, not an oversight.
 
-Next, in order: screenshot masking for regulated data, path minimization, then the
-cross-tenant drift signal, because those are what I would want before running this
+* **Desktop surface.** Designed for in section 4, not implemented.
+* **Operator console.** A terminal and a CDP endpoint. A web console would read the
+  same files and attach to the same session.
+* **Screenshot masking.** Screens are stored as captured, so regulated data visible on
+  one sits in the run directory.
+* **Tenant fleet tooling.** The drift signal exists per step and is demonstrated on a
+  second institution; nothing collects or reports it across many runs.
+* **Path minimization.** A model's detour stays in the recording. I would rather show a
+  reviewer the real path than silently edit it, and dropping a step to see whether the
+  checkpoints still hold is the obvious next feature.
+* **Rescuing a stuck discovery.** A person's steps are logged but not folded into the
+  capability, so the run is marked failed rather than producing a flow with a hole in it.
+* **Assisted fallback.** No bounded model recovery on replay failure. The handoff covers
+  those cases with a person, which is the right default for a bank.
+* **Stability scoring.** Replaying N times for a flakiness number is a loop around what
+  already exists.
+
+Next, in order: screenshot masking for regulated data, then path minimization, then the
+cross-tenant drift signal, because those are the three I would want before running this
 unattended against a real core.
