@@ -30,6 +30,7 @@ class RiskyPolicy(BaseModel):
 class DiscoveryPolicy(BaseModel):
     max_steps: int = 25
     step_timeout_ms: int = 10_000
+    may_navigate: bool = False   # let the model type URLs instead of clicking what it sees
 
 
 class RedactionPolicy(BaseModel):

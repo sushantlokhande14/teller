@@ -65,7 +65,7 @@ You see each screen as a numbered list of controls and cells, plus a screenshot 
 
 Rules:
 - You are already signed in. Never type credentials or anything that looks like a password.
-- Prefer the links, fields and buttons you can see. Use navigate only when nothing on screen gets you there.
+- Work only from what is on the screen in front of you. Every ref you act on must appear in the current listing.
 - Do not click anything that posts a change (confirm, submit, transfer, delete, close) unless the goal requires it, and say so in `why`.
 - When the goal asks you to read a value, call extract with the declared output name and the ref of the cell that holds exactly that value, then call done once every output is recorded.
 - Keep to the shortest path. Do not explore for its own sake.
@@ -84,20 +84,25 @@ class Decision:
 
 class Model(Protocol):
     name: str
+    accepts_images: bool
 
-    def decide(self, system: str, messages: list[dict[str, Any]], observation: Observation) -> Decision: ...
+    def decide(self, system: str, messages: list[dict[str, Any]], observation: Observation,
+               tools: list[dict[str, Any]]) -> Decision: ...
 
 
 class ClaudeModel:
+    accepts_images = True
+
     def __init__(self, model: str | None = None) -> None:
         import anthropic
 
         self.name = model or os.environ.get("TELLER_MODEL", "claude-opus-5")
         self._client = anthropic.Anthropic()
 
-    def decide(self, system: str, messages: list[dict[str, Any]], observation: Observation) -> Decision:
+    def decide(self, system: str, messages: list[dict[str, Any]], observation: Observation,
+               tools: list[dict[str, Any]]) -> Decision:
         resp = self._client.messages.create(
-            model=self.name, max_tokens=4096, system=system, tools=TOOLS,
+            model=self.name, max_tokens=4096, system=system, tools=tools,
             tool_choice={"type": "auto", "disable_parallel_tool_use": True}, messages=messages)
         text = " ".join(b.text for b in resp.content if b.type == "text").strip()
         tool = next((b for b in resp.content if b.type == "tool_use"), None)
@@ -107,17 +112,116 @@ class ClaudeModel:
         return Decision(tool=tool.name, args=dict(tool.input), text=text, content=content, stop_reason=resp.stop_reason)
 
 
+# The transcript is kept in one shape (content blocks, the richer of the two) and
+# translated per provider. Keeping one canonical history means the recorder, the
+# evidence and the redaction see the same thing whichever model drove the run.
+
+def to_openai_messages(system: str, messages: list[dict[str, Any]], accepts_images: bool) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = [{"role": "system", "content": system}]
+    for m in messages:
+        blocks = m["content"] if isinstance(m["content"], list) else [{"type": "text", "text": m["content"]}]
+        if m["role"] == "assistant":
+            text = " ".join(b.get("text", "") for b in blocks if b.get("type") == "text").strip()
+            calls = [{"id": b["id"], "type": "function",
+                      "function": {"name": b["name"], "arguments": json.dumps(b.get("input", {}))}}
+                     for b in blocks if b.get("type") == "tool_use"]
+            entry: dict[str, Any] = {"role": "assistant", "content": text or None}
+            if calls:
+                entry["tool_calls"] = calls
+            out.append(entry)
+            continue
+        # A user turn is either tool results, or an observation (text plus a screenshot).
+        results = [b for b in blocks if b.get("type") == "tool_result"]
+        for b in results:
+            out.append({"role": "tool", "tool_call_id": b["tool_use_id"], "content": str(b.get("content", ""))})
+        parts: list[dict[str, Any]] = []
+        for b in blocks:
+            if b.get("type") == "text":
+                parts.append({"type": "text", "text": b["text"]})
+            elif b.get("type") == "image" and accepts_images:
+                src = b["source"]
+                parts.append({"type": "image_url",
+                              "image_url": {"url": f"data:{src['media_type']};base64,{src['data']}"}})
+        if parts:
+            out.append({"role": "user", "content": parts})
+    return out
+
+
+def openai_tools(tools: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [{"type": "function", "function": {"name": t["name"], "description": t["description"],
+                                              "parameters": t["input_schema"]}} for t in tools]
+
+# base URL and the environment variable holding the key. The model id is always given
+# explicitly (--model or TELLER_MODEL) so this table cannot go stale.
+PROVIDERS = {
+    "ollama": ("http://127.0.0.1:11434/v1", "TELLER_API_KEY"),
+    "groq": ("https://api.groq.com/openai/v1", "GROQ_API_KEY"),
+    "gemini": ("https://generativelanguage.googleapis.com/v1beta/openai/", "GEMINI_API_KEY"),
+    "openrouter": ("https://openrouter.ai/api/v1", "OPENROUTER_API_KEY"),
+    "openai": ("https://api.openai.com/v1", "OPENAI_API_KEY"),
+}
+
+
+class OpenAICompatModel:
+    """Any endpoint that speaks OpenAI chat completions: a local Ollama server, a free
+    hosted tier, or OpenAI itself. Small local models are often text-only, so images
+    are off unless the caller says otherwise; the observation listing carries the
+    information the model actually needs."""
+
+    def __init__(self, model: str, base_url: str, api_key: str = "", vision: bool = False) -> None:
+        from openai import OpenAI
+
+        self.name = model
+        self.base_url = base_url
+        self.accepts_images = vision
+        self._client = OpenAI(base_url=base_url, api_key=api_key or "not-needed", timeout=180.0, max_retries=2)
+
+    @classmethod
+    def from_provider(cls, provider: str, model: str | None, base_url: str | None = None,
+                      vision: bool = False) -> "OpenAICompatModel":
+        default_base, key_env = PROVIDERS.get(provider, (None, "TELLER_API_KEY"))
+        base = base_url or os.environ.get("TELLER_API_BASE") or default_base
+        if not base:
+            raise SystemExit(f"unknown provider {provider!r}; pass --api-base or set TELLER_API_BASE")
+        name = model or os.environ.get("TELLER_MODEL")
+        if not name:
+            raise SystemExit(f"provider {provider!r} needs a model id: pass --model or set TELLER_MODEL")
+        return cls(name, base, os.environ.get(key_env, ""), vision)
+
+    def decide(self, system: str, messages: list[dict[str, Any]], observation: Observation,
+               tools: list[dict[str, Any]]) -> Decision:
+        resp = self._client.chat.completions.create(
+            model=self.name, max_tokens=1024, tools=openai_tools(tools), tool_choice="auto", parallel_tool_calls=False,
+            messages=to_openai_messages(system, messages, self.accepts_images))
+        choice = resp.choices[0]
+        text = (choice.message.content or "").strip()
+        calls = choice.message.tool_calls or []
+        content: list[dict[str, Any]] = [{"type": "text", "text": text}] if text else []
+        if not calls:
+            return Decision(tool=None, args={}, text=text, content=content, stop_reason=choice.finish_reason or "")
+        call = calls[0]
+        try:
+            args = json.loads(call.function.arguments or "{}")
+        except ValueError:
+            return Decision(tool=None, args={}, text=text, content=content, stop_reason="bad_arguments")
+        content.append({"type": "tool_use", "id": call.id, "name": call.function.name, "input": args})
+        return Decision(tool=call.function.name, args=args, text=text, content=content,
+                        stop_reason=choice.finish_reason or "tool_calls")
+
+
 class ScriptedModel:
     """A stand-in for tests and key-less demos: a fixed list of tool calls that
     name controls by role and name instead of by ref."""
 
     name = "scripted"
+    accepts_images = False
 
     def __init__(self, script: list[dict[str, Any]]) -> None:
         self._script = list(script)
         self._i = 0
 
-    def decide(self, system: str, messages: list[dict[str, Any]], observation: Observation) -> Decision:
+    def decide(self, system: str, messages: list[dict[str, Any]], observation: Observation,
+               tools: list[dict[str, Any]]) -> Decision:
         if self._i >= len(self._script):
             return Decision(tool="give_up", args={"reason": "script exhausted"}, content=[])
         item = self._script[self._i]
@@ -163,6 +267,10 @@ class DiscoveryRun:
         self.messages: list[dict[str, Any]] = []
         self.status = "running"
         self.reason = ""
+        # Typing a URL is withheld unless policy allows it. A recorded URL hop is the least
+        # portable thing a flow can contain (paths differ per tenant and per version), and
+        # offering the tool invites a model to guess a path instead of clicking what is there.
+        self.tools = [t for t in TOOLS if t["name"] != "navigate" or policy.discovery.may_navigate]
 
     # ------------------------------------------------------------------ prompt
 
@@ -171,12 +279,13 @@ class DiscoveryRun:
                  for k, v in self.inputs.items()}
         outs = {k: (v if isinstance(v, dict) else v.model_dump()) for k, v in self.contract.outputs.items()}
         return (SYSTEM + f"\nGoal: {fill(self.contract.goal, self.inputs)}\n"
+                + f"Tools available: {', '.join(t['name'] for t in self.tools)}\n"
                 + f"Inputs: {json.dumps(shown)}\n"
                 + f"Outputs to extract: {json.dumps(outs)}\n")
 
     def _user_turn(self, obs: Observation, note: str = "") -> dict[str, Any]:
         content: list[dict[str, Any]] = []
-        if obs.screenshot:
+        if obs.screenshot and getattr(self.model, "accepts_images", True):
             content.append({"type": "image", "source": {"type": "base64", "media_type": "image/png",
                                                         "data": base64.standard_b64encode(obs.screenshot).decode()}})
         text = obs.to_prompt()
@@ -210,7 +319,7 @@ class DiscoveryRun:
         for step in range(1, self.policy.discovery.max_steps + 1):
             self._trim_images()
             t0 = time.monotonic()
-            decision = self.model.decide(system, self.messages, obs)
+            decision = self.model.decide(system, self.messages, obs, self.tools)
             self.log.event("decide", step=step, tool=decision.tool, args=decision.args, text=decision.text,
                            stop_reason=decision.stop_reason, ms=int((time.monotonic() - t0) * 1000))
             if decision.content:

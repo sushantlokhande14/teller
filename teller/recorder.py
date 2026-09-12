@@ -188,7 +188,7 @@ def derive_checkpoint(entry: TraceEntry, target: Target | None, canon: Canon, ti
 
 def build_capability(trace: list[TraceEntry], extractions: dict[str, Extraction], contract: Contract,
                      inputs: dict[str, str], profile_id: str, profile_version: str, run_id: str,
-                     model: str, policy: Policy, redactor: Redactor) -> Capability:
+                     model: str, policy: Policy, redactor: Redactor, endpoint: str | None = None) -> Capability:
     canon = Canon(inputs, contract.inputs)
     steps: list[Step] = []
     n = 0
@@ -237,4 +237,5 @@ def build_capability(trace: list[TraceEntry], extractions: dict[str, Extraction]
         id=contract.id, title=contract.title, description=contract.description or contract.title,
         app=AppRef(profile=profile_id, version=profile_version, entry=canon(contract.entry) or "/"),
         inputs=specs, outputs=outputs, steps=steps, success=success, risk=risk,
-        provenance=Provenance(recorded_at=now_iso(), model=model, discovery_run=run_id, teller_version=__version__))
+        provenance=Provenance(recorded_at=now_iso(), model=model, endpoint=endpoint, discovery_run=run_id,
+                              teller_version=__version__))

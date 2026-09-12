@@ -211,8 +211,12 @@ class PlaywrightSurface:
         frames: list[list[str]] = []
         main = self.main_frame()
         main_data: dict | None = None
-        ref = 1
-        for frame in list(self.page.frames):
+        # Collect everything first, then number it. Controls a person can act on come
+        # before the text they read, and the content frame comes before the surrounding
+        # chrome, so the refs that matter for a task are the low ones. Without this the
+        # menu of a frameset occupies the first ref numbers on every single screen.
+        found: list[tuple[tuple, Element, Frame, int]] = []
+        for order, frame in enumerate(list(self.page.frames)):
             path = self.frame_path(frame)
             data = self._snapshot(frame)
             if data is None:
@@ -221,18 +225,24 @@ class PlaywrightSurface:
             frames.append(path)
             if frame == main:
                 main_data = data
-            for e in data["elements"]:
+            for i, e in enumerate(data["elements"]):
                 x, y, w, h = e["bbox"]
-                elements.append(Element(
-                    ref=ref, role=e["role"], name=e["name"], frame=path, bbox=(x + ox, y + oy, w, h),
+                el = Element(
+                    ref=0, role=e["role"], name=e["name"], frame=path, bbox=(x + ox, y + oy, w, h),
                     tag=e["tag"], name_source=e.get("name_source", "content"),
                     value=e.get("value", ""), row_label=e.get("row_label", ""),
                     row_cells=e.get("row_cells", []), col_header=e.get("col_header", ""),
                     placeholder=e.get("placeholder", ""), options=e.get("options", []),
                     disabled=bool(e.get("disabled")), css=e.get("css", ""),
-                    form_action=e.get("form_action", "")))
-                ref_map[ref] = (frame, e["idx"])
-                ref += 1
+                    form_action=e.get("form_action", ""))
+                found.append(((not el.interactive(), frame is not main, order, i), el, frame, e["idx"]))
+        found.sort(key=lambda item: item[0])
+        ref = 1
+        for _, el, frame, idx in found:
+            el.ref = ref
+            elements.append(el)
+            ref_map[ref] = (frame, idx)
+            ref += 1
         if main_data is None:
             main_data = {"url": main.url, "title": "", "heading": None, "text": ""}
         shot = None

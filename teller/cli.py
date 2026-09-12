@@ -19,7 +19,7 @@ import urllib.parse
 import urllib.request
 from pathlib import Path
 
-from teller.agent import ClaudeModel, DiscoveryRun, ScriptedModel
+from teller.agent import PROVIDERS, ClaudeModel, DiscoveryRun, OpenAICompatModel, ScriptedModel
 from teller.evidence import RunLog, new_run_id
 from teller.handoff import ControlBroker
 from teller.policy import Policy, Redactor
@@ -75,6 +75,16 @@ def start_operator(run_dir: Path, script: str, timeout: int) -> subprocess.Popen
                              "--timeout", str(timeout)], stdout=log, stderr=subprocess.STDOUT)
 
 
+def build_model(args: argparse.Namespace):
+    """Pick the model that drives discovery. Replay never gets here."""
+    if args.scripted:
+        return ScriptedModel(json.loads(Path(args.scripted).read_text(encoding="utf-8")))
+    provider = args.provider or os.environ.get("TELLER_PROVIDER", "anthropic")
+    if provider == "anthropic":
+        return ClaudeModel(args.model)
+    return OpenAICompatModel.from_provider(provider, args.model, args.api_base, args.vision)
+
+
 def set_fault(base_url: str, kind: str, mode: str) -> None:
     data = urllib.parse.urlencode({"kind": kind, "mode": mode}).encode()
     with urllib.request.urlopen(urllib.request.Request(base_url.rstrip("/") + "/__fault", data=data), timeout=5) as r:
@@ -93,7 +103,7 @@ def cmd_discover(args: argparse.Namespace) -> int:
     policy = Policy.load(args.policy)
     redactor = make_redactor(policy, contract.inputs, inputs, profile)
     log = RunLog(args.runs, new_run_id("discovery"), redactor)
-    model = ScriptedModel(json.loads(Path(args.scripted).read_text(encoding="utf-8"))) if args.scripted else ClaudeModel(args.model)
+    model = build_model(args)
     surface = PlaywrightSurface(profile, headed=args.headed, cdp_port=args.cdp_port, allow_bbox=policy.coordinate_fallback)
     operator = start_operator(log.dir, args.operator, policy.handoff_timeout_s) if args.operator else None
     broker = ControlBroker(log.dir, surface, log, policy.handoff_timeout_s)
@@ -105,7 +115,7 @@ def cmd_discover(args: argparse.Namespace) -> int:
             print(f"discovery {status}: {run.reason}")
             return 1
         cap = build_capability(run.trace, run.extractions, contract, inputs, profile.id, profile.version,
-                               log.run_id, model.name, policy, redactor)
+                               log.run_id, model.name, policy, redactor, getattr(model, "base_url", None))
         out = Path(args.out) / f"{cap.id}.json"
         out.parent.mkdir(parents=True, exist_ok=True)
         cap.save(str(out))
@@ -208,7 +218,11 @@ def build_parser() -> argparse.ArgumentParser:
     d = sub.add_parser("discover", help="LLM-driven run that records a capability")
     d.add_argument("contract")
     d.add_argument("--input", action="append")
-    d.add_argument("--model", default=None)
+    d.add_argument("--provider", default=None, choices=["anthropic", *PROVIDERS],
+                   help="where the model runs (default: anthropic, or TELLER_PROVIDER)")
+    d.add_argument("--model", default=None, help="model id, or TELLER_MODEL")
+    d.add_argument("--api-base", default=None, help="override the provider's base URL")
+    d.add_argument("--vision", action="store_true", help="send screenshots (the model must accept images)")
     d.add_argument("--scripted", default=None, help="use a scripted stand-in model (no API key needed)")
     d.add_argument("--out", default="capabilities")
     common(d)

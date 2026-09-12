@@ -39,6 +39,11 @@ class Element:
     form_action: str = ""          # where the enclosing form posts, for risk classification
     css: str = ""                  # structural path; brittle, recorded only as a last resort
 
+    INTERACTIVE = ("link", "button", "textbox", "checkbox", "radio", "combobox")
+
+    def interactive(self) -> bool:
+        return self.role in self.INTERACTIVE
+
     def short(self) -> str:
         bits = [f"[{self.ref}] {self.role} \"{self.name}\""]
         if self.frame:
@@ -79,8 +84,13 @@ class Observation:
         lines = [f"URL: {self.path}" + (f"   [HTTP {self.http_status}]" if self.http_status else "")]
         if self.heading:
             lines.append(f"Heading: {self.heading}")
-        lines.append("Controls and cells (act by ref number):")
-        lines.extend(el.short() for el in self.elements)
+        controls = [el for el in self.elements if el.interactive()]
+        rest = [el for el in self.elements if not el.interactive()]
+        lines.append("Controls you can act on (use the ref number):")
+        lines.extend(el.short() for el in controls)
+        if rest:
+            lines.append("Text and table cells on the page (read only, extract by ref):")
+            lines.extend(el.short() for el in rest)
         text = self.text if len(self.text) <= max_text else self.text[:max_text] + " ..."
         lines.append("Visible text of the main frame:")
         lines.append(text)

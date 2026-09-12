@@ -210,6 +210,7 @@ class AppRef(BaseModel):
 class Provenance(BaseModel):
     recorded_at: str
     model: str
+    endpoint: str | None = None     # where that model ran, when it was not the default provider
     discovery_run: str
     teller_version: str
     approved_by: str | None = None
