@@ -161,8 +161,8 @@ pytest -q -m e2e           # starts the sample app in-process, drives real Chrom
 
 The scripted model is a stand-in that names controls by role and label instead of
 by ref; it goes through the same loop, policy checks, recorder and replay as the
-real model. It is for tests and pipeline checks only. The evidence folder was
-produced with the real model.
+real model. It is for tests and pipeline checks only. `evidence/README.md` and
+each capability's `provenance.model` record which model actually drove a run.
 
 To regenerate the evidence folder end to end (needs the API key and the sample app running):
 

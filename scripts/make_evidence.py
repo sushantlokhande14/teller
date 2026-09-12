@@ -42,6 +42,17 @@ def keep(name: str, note: str, index: list[str]) -> Path:
     shutil.copytree(src, dst, ignore=shutil.ignore_patterns("*.tmp"))
     result = dst / "result.json"
     summary = ""
+    if not result.exists() and (dst / "log.jsonl").exists():
+        # a discovery run: summarize from its last log event
+        events = [json.loads(l) for l in (dst / "log.jsonl").read_text(encoding="utf-8").splitlines() if l.strip()]
+        end = next((e for e in reversed(events) if e.get("event") == "discovery.end"), None)
+        start = next((e for e in events if e.get("event") == "discovery.start"), None)
+        if end:
+            summary = f"{end['status']} after {end.get('actions')} actions"
+            if start:
+                summary += f" ({start.get('model')})"
+            if end.get("extracted"):
+                summary += " " + json.dumps(end["extracted"])
     if result.exists():
         r = json.loads(result.read_text(encoding="utf-8"))
         summary = r["status"]
