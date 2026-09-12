@@ -1,0 +1,41 @@
+# Guardrails for every run. Enforced before each action, in discovery and replay.
+
+allowed_origins:
+  - http://127.0.0.1:5057
+  - http://localhost:5057
+
+# Regexes on the URL path. Empty allowed_paths means any path on an allowed origin.
+allowed_paths: []
+blocked_paths:
+  - "^/logout"          # never sign the operator out
+  - "^/__"              # never touch the sample app's test hooks
+
+allowed_actions: [navigate, click, type, select, press, extract]
+
+# Risky = anything that posts a change to the core. Decided from what a person
+# would read on the control, plus where the form posts.
+risky:
+  mode: confirm         # block | confirm | allow
+  button_names:
+    - "(?i)^(confirm|submit|post|transfer|approve|delete|remove|close account)"
+  url_patterns:
+    - "/open$"
+    - "/transfer"
+    - "/close"
+
+coordinate_fallback: false   # clicking by saved screen position is off unless a profile really needs it
+escalate_on_unknown: true    # unknown screen during replay -> ask a person instead of failing
+require_approval: true       # replay refuses drafts and anything edited since approval (pass --allow-draft to override)
+handoff_timeout_s: 600
+replay_step_timeout_ms: 10000
+
+discovery:
+  max_steps: 25
+  step_timeout_ms: 10000
+
+# Regexes applied to everything written to disk. Keep them tight: an early version of
+# the card pattern also matched the timestamp in run ids and scrubbed evidence paths.
+redaction:
+  patterns:
+    ssn: "\\b\\d{3}-\\d{2}-\\d{4}\\b"
+    card: "\\b(?:\\d{4}[ -]){3}\\d{4}\\b|\\b\\d{13,16}\\b"

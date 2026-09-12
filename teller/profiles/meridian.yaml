@@ -1,0 +1,92 @@
+# App profile for the Meridian sample app. One of these exists per vendor
+# product; capabilities recorded against it share what is in here (how to sign
+# in, which frame holds the content, and the screens that mean "something went
+# wrong" and what to do about them). A tenant overlay can override base_url,
+# auth and add conditions without re-recording anything.
+
+id: meridian
+product: Meridian Core Servicing
+version: "4.2"
+base_url: http://127.0.0.1:5057
+main_frame: [main]
+
+auth:
+  login_url: /login
+  user_env: MERIDIAN_USER
+  pass_env: MERIDIAN_PASS
+  user_target:
+    describe: User ID field on the sign-in form
+    role: textbox
+    name: User ID
+    frame: [main]
+    locators:
+      - {strategy: role, value: User ID}
+      - {strategy: row_label, value: User ID}
+  pass_target:
+    describe: Password field on the sign-in form
+    role: textbox
+    name: Password
+    frame: [main]
+    locators:
+      - {strategy: row_label, value: Password}
+      - {strategy: css, value: "input[type=password]"}
+  submit_target:
+    describe: Sign In button
+    role: button
+    name: Sign In
+    frame: [main]
+    locators:
+      - {strategy: role, value: Sign In}
+  signed_in_check:
+    url: "^(?!/login)"
+
+conditions:
+  # ---- recoverable: handle it, then carry on with the step ---------------------
+  - id: session_expired
+    kind: recoverable
+    when: {url: "^/login"}
+    then: {kind: reauth}
+
+  - id: system_notice
+    kind: recoverable
+    when: {text: "System Notice"}
+    then:
+      kind: dismiss
+      target:
+        describe: Acknowledge button on the system notice
+        role: button
+        name: Acknowledge
+        frame: [main]
+        locators:
+          - {strategy: role, value: Acknowledge}
+
+  - id: host_busy
+    kind: recoverable
+    when: {text: "core host is busy"}
+    then: {kind: wait, wait_ms: 3500}
+    max_attempts: 4
+
+  # ---- outcomes: legitimate answers the caller needs to hear about ------------
+  - id: record_not_found
+    kind: outcome
+    outcome: not_found
+    when: {text: "No (member|account|record) found"}
+    message: "(No (?:member|account|record) found[^.]*\\.)"
+
+  - id: validation_error
+    kind: outcome
+    outcome: validation_error
+    when: {text: "must be numeric|is required[.]|must be a dollar amount|Select a valid product"}
+    message: "([A-Z][^.]*(?:must be numeric|is required|must be a dollar amount|Select a valid product)[^.]*[.])"
+
+  - id: permission_denied
+    kind: outcome
+    outcome: permission_denied
+    when: {text: "You do not have permission"}
+    message: "(You do not have permission[^.]*\\.)"
+
+  # ---- fatal: stop and hand back evidence ---------------------------------------
+  - id: app_error
+    kind: fatal
+    when: {text: "Application Error"}
+    message: "(Reference: [^.]*\\.)"
