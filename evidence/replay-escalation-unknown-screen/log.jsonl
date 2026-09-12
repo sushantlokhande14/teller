@@ -1,0 +1,16 @@
+{"seq": 1, "t_ms": 640, "at": "2026-09-12T08:06:31.004+00:00", "event": "replay.start", "capability": "member_savings_balance", "version": 1, "status": "approved", "fingerprint": "ad474901f2cd1165", "inputs": {"member_id": "100234"}}
+{"seq": 2, "t_ms": 1531, "at": "2026-09-12T08:06:31.883+00:00", "event": "fault.injected", "kind": "surprise", "mode": "once"}
+{"seq": 3, "t_ms": 1718, "at": "2026-09-12T08:06:32.074+00:00", "event": "act", "step": "s1", "action": "click", "target": "the 'Member Lookup' link in the nav frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 4, "t_ms": 12390, "at": "2026-09-12T08:06:42.745+00:00", "event": "checkpoint.failed", "step": "s1", "expected": "url=/main/members; heading='Member Lookup'", "observed": "heading is 'Security Alert', expected 'Member Lookup'"}
+{"seq": 5, "t_ms": 12468, "at": "2026-09-12T08:06:42.822+00:00", "event": "handoff.requested", "id": "h1", "kind": "unknown_state", "reason": "unexpected screen at step s1: heading is 'Security Alert', expected 'Member Lookup'", "step_id": "s1", "screenshot": "runs\\replay-20260912-080630-d9d6\\screens\\handoff-h1.png", "request_file": "runs\\replay-20260912-080630-d9d6\\intervention.json"}
+{"seq": 6, "t_ms": 13515, "at": "2026-09-12T08:06:43.866+00:00", "event": "human.action", "handoff": "h1", "action": "click", "detail": "input \"Remind Me Later\" in frame main"}
+{"seq": 7, "t_ms": 13515, "at": "2026-09-12T08:06:43.866+00:00", "event": "human.action", "handoff": "h1", "action": "submit", "detail": "form action=\"/main/surprise/later\""}
+{"seq": 8, "t_ms": 13515, "at": "2026-09-12T08:06:43.866+00:00", "event": "human.action", "handoff": "h1", "action": "navigate", "detail": "main -> /main/members"}
+{"seq": 9, "t_ms": 14031, "at": "2026-09-12T08:06:44.388+00:00", "event": "handoff.resolved", "id": "h1", "resolution": "resumed", "note": "password expiry alert; chose Remind Me Later so the run can continue", "resume_from": "verify", "actions": 3}
+{"seq": 10, "t_ms": 14421, "at": "2026-09-12T08:06:44.783+00:00", "event": "act", "step": "s2", "action": "type", "target": "the 'Member Number' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "100234", "risk": "safe"}
+{"seq": 11, "t_ms": 15093, "at": "2026-09-12T08:06:45.455+00:00", "event": "checkpoint.ok", "step": "s2", "attempts": 1}
+{"seq": 12, "t_ms": 15281, "at": "2026-09-12T08:06:45.643+00:00", "event": "act", "step": "s3", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
+{"seq": 13, "t_ms": 15937, "at": "2026-09-12T08:06:46.298+00:00", "event": "checkpoint.ok", "step": "s3", "attempts": 1}
+{"seq": 14, "t_ms": 15985, "at": "2026-09-12T08:06:46.338+00:00", "event": "extract", "output": "savings_balance", "strategy": "table_cell", "drift": false, "value": "4812.55"}
+{"seq": 15, "t_ms": 16000, "at": "2026-09-12T08:06:46.353+00:00", "event": "extract", "output": "member_name", "strategy": "row_label", "drift": false, "value": "Priya Natarajan"}
+{"seq": 16, "t_ms": 16453, "at": "2026-09-12T08:06:46.815+00:00", "event": "replay.end", "status": "success", "outputs": {"savings_balance": "4812.55", "member_name": "Priya Natarajan"}}

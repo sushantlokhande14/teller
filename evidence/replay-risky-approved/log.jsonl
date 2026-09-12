@@ -1,0 +1,22 @@
+{"seq": 1, "t_ms": 640, "at": "2026-09-12T08:07:32.369+00:00", "event": "replay.start", "capability": "open_savings_subaccount", "version": 1, "status": "approved", "fingerprint": "09b0a956e72cd4f1", "inputs": {"member_id": "100234", "nickname": "Rainy day", "deposit": "40.00"}}
+{"seq": 2, "t_ms": 1687, "at": "2026-09-12T08:07:33.413+00:00", "event": "act", "step": "s1", "action": "click", "target": "the 'Member Lookup' link in the nav frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 3, "t_ms": 2296, "at": "2026-09-12T08:07:34.028+00:00", "event": "checkpoint.ok", "step": "s1", "attempts": 1}
+{"seq": 4, "t_ms": 2485, "at": "2026-09-12T08:07:34.223+00:00", "event": "act", "step": "s2", "action": "type", "target": "the 'Member Number' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "100234", "risk": "safe"}
+{"seq": 5, "t_ms": 3156, "at": "2026-09-12T08:07:34.886+00:00", "event": "checkpoint.ok", "step": "s2", "attempts": 1}
+{"seq": 6, "t_ms": 3375, "at": "2026-09-12T08:07:35.101+00:00", "event": "act", "step": "s3", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
+{"seq": 7, "t_ms": 4062, "at": "2026-09-12T08:07:35.792+00:00", "event": "checkpoint.ok", "step": "s3", "attempts": 1}
+{"seq": 8, "t_ms": 4281, "at": "2026-09-12T08:07:36.017+00:00", "event": "act", "step": "s4", "action": "click", "target": "the 'New Sub-Account' link in the main frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 9, "t_ms": 4953, "at": "2026-09-12T08:07:36.685+00:00", "event": "checkpoint.ok", "step": "s4", "attempts": 1}
+{"seq": 10, "t_ms": 5140, "at": "2026-09-12T08:07:36.877+00:00", "event": "act", "step": "s5", "action": "type", "target": "the 'Nickname' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "Rainy day", "risk": "safe"}
+{"seq": 11, "t_ms": 5796, "at": "2026-09-12T08:07:37.532+00:00", "event": "checkpoint.ok", "step": "s5", "attempts": 1}
+{"seq": 12, "t_ms": 6031, "at": "2026-09-12T08:07:37.764+00:00", "event": "act", "step": "s6", "action": "type", "target": "the 'Initial Deposit' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "40.00", "risk": "safe"}
+{"seq": 13, "t_ms": 6656, "at": "2026-09-12T08:07:38.387+00:00", "event": "checkpoint.ok", "step": "s6", "attempts": 1}
+{"seq": 14, "t_ms": 6828, "at": "2026-09-12T08:07:38.567+00:00", "event": "act", "step": "s7", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
+{"seq": 15, "t_ms": 7485, "at": "2026-09-12T08:07:39.211+00:00", "event": "checkpoint.ok", "step": "s7", "attempts": 1}
+{"seq": 16, "t_ms": 7735, "at": "2026-09-12T08:07:39.464+00:00", "event": "handoff.requested", "id": "h1", "kind": "approval", "reason": "click on 'Confirm Open' is risky; a person must confirm", "step_id": "s8", "screenshot": "runs\\replay-20260912-080731-8c04\\screens\\handoff-h1.png", "request_file": "runs\\replay-20260912-080731-8c04\\intervention.json"}
+{"seq": 17, "t_ms": 8265, "at": "2026-09-12T08:07:39.997+00:00", "event": "handoff.resolved", "id": "h1", "resolution": "resumed", "note": "reviewed the review screen; opening the sub-account is what the caller asked for", "resume_from": "retry_step", "actions": 0}
+{"seq": 18, "t_ms": 8265, "at": "2026-09-12T08:07:39.997+00:00", "event": "policy.confirmed", "step": "s8", "by": "operator", "note": "reviewed the review screen; opening the sub-account is what the caller asked for"}
+{"seq": 19, "t_ms": 8265, "at": "2026-09-12T08:07:39.997+00:00", "event": "act", "step": "s8", "action": "click", "target": "the 'Confirm Open' button in the main frame", "strategy": "role", "drift": false, "value": null, "risk": "risky"}
+{"seq": 20, "t_ms": 8921, "at": "2026-09-12T08:07:40.651+00:00", "event": "checkpoint.ok", "step": "s8", "attempts": 1}
+{"seq": 21, "t_ms": 8937, "at": "2026-09-12T08:07:40.674+00:00", "event": "extract", "output": "account_number", "strategy": "row_label", "drift": false, "value": "100234-S03"}
+{"seq": 22, "t_ms": 9421, "at": "2026-09-12T08:07:41.153+00:00", "event": "replay.end", "status": "success", "outputs": {"account_number": "100234-S03"}}

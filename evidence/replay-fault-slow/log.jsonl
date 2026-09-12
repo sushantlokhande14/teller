@@ -1,0 +1,14 @@
+{"seq": 1, "t_ms": 610, "at": "2026-09-12T08:06:16.215+00:00", "event": "replay.start", "capability": "member_savings_balance", "version": 1, "status": "approved", "fingerprint": "ad474901f2cd1165", "inputs": {"member_id": "100234"}}
+{"seq": 2, "t_ms": 1468, "at": "2026-09-12T08:06:17.074+00:00", "event": "fault.injected", "kind": "slow", "mode": "once"}
+{"seq": 3, "t_ms": 1656, "at": "2026-09-12T08:06:17.267+00:00", "event": "act", "step": "s1", "action": "click", "target": "the 'Member Lookup' link in the nav frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 4, "t_ms": 2031, "at": "2026-09-12T08:06:17.640+00:00", "event": "checkpoint.failed", "step": "s1", "expected": "url=/main/members; heading='Member Lookup'", "observed": "heading is None, expected 'Member Lookup'"}
+{"seq": 5, "t_ms": 2031, "at": "2026-09-12T08:06:17.641+00:00", "event": "condition", "step": "s1", "id": "host_busy", "kind": "recoverable", "message": "", "hit": 1}
+{"seq": 6, "t_ms": 5735, "at": "2026-09-12T08:06:21.339+00:00", "event": "recovery", "step": "s1", "id": "host_busy", "handler": "wait", "now_at": "/main/members"}
+{"seq": 7, "t_ms": 6156, "at": "2026-09-12T08:06:21.766+00:00", "event": "checkpoint.ok", "step": "s1", "via": "recovery:host_busy"}
+{"seq": 8, "t_ms": 6343, "at": "2026-09-12T08:06:21.956+00:00", "event": "act", "step": "s2", "action": "type", "target": "the 'Member Number' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "100234", "risk": "safe"}
+{"seq": 9, "t_ms": 6953, "at": "2026-09-12T08:06:22.563+00:00", "event": "checkpoint.ok", "step": "s2", "attempts": 1}
+{"seq": 10, "t_ms": 7140, "at": "2026-09-12T08:06:22.741+00:00", "event": "act", "step": "s3", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
+{"seq": 11, "t_ms": 7735, "at": "2026-09-12T08:06:23.338+00:00", "event": "checkpoint.ok", "step": "s3", "attempts": 1}
+{"seq": 12, "t_ms": 7765, "at": "2026-09-12T08:06:23.378+00:00", "event": "extract", "output": "savings_balance", "strategy": "table_cell", "drift": false, "value": "4812.55"}
+{"seq": 13, "t_ms": 7781, "at": "2026-09-12T08:06:23.391+00:00", "event": "extract", "output": "member_name", "strategy": "row_label", "drift": false, "value": "Priya Natarajan"}
+{"seq": 14, "t_ms": 8203, "at": "2026-09-12T08:06:23.815+00:00", "event": "replay.end", "status": "success", "outputs": {"savings_balance": "4812.55", "member_name": "Priya Natarajan"}}

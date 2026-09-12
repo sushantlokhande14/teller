@@ -1,0 +1,19 @@
+{
+  "status": "outcome",
+  "capability": "member_savings_balance",
+  "version": 1,
+  "run_id": "replay-20260912-080624-0552",
+  "inputs": {
+    "member_id": "100234"
+  },
+  "outcome": {
+    "code": "permission_denied",
+    "message": "You do not have permission to view /main/members.",
+    "step_id": "s1",
+    "condition_id": "permission_denied"
+  },
+  "steps": [],
+  "handoffs": [],
+  "duration_ms": 1656,
+  "run_dir": "runs\\replay-20260912-080624-0552"
+}

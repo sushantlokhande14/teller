@@ -1,0 +1,38 @@
+{
+  "status": "outcome",
+  "capability": "member_savings_balance",
+  "version": 1,
+  "run_id": "replay-20260912-080558-b58f",
+  "inputs": {
+    "member_id": "999999"
+  },
+  "outcome": {
+    "code": "not_found",
+    "message": "No member found for number 999999.",
+    "step_id": "s3",
+    "condition_id": "record_not_found"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "status": "ok",
+      "attempts": 1,
+      "locator_used": "role",
+      "drift": false,
+      "recoveries": [],
+      "duration_ms": 828
+    },
+    {
+      "id": "s2",
+      "status": "ok",
+      "attempts": 1,
+      "locator_used": "row_label",
+      "drift": false,
+      "recoveries": [],
+      "duration_ms": 796
+    }
+  ],
+  "handoffs": [],
+  "duration_ms": 3233,
+  "run_dir": "runs\\replay-20260912-080558-b58f"
+}

@@ -1,0 +1,146 @@
+[
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "URL: /main/home   [HTTP 200]\nHeading: Welcome\nControls you can act on (use the ref number):\n[1] link \"Home\" frame=nav\n[2] link \"Member Lookup\" frame=nav\n[3] link \"Reports\" frame=nav\n[4] link \"Sign Out\" frame=nav\nText and table cells on the page (read only, extract by ref):\n[5] heading \"Welcome\" frame=main\n[6] cell \"MERIDIAN CORE SERVICING\" frame=main\n[7] cell \"Release 4.2.117 | operator1\" frame=main row=\"MERIDIAN CORE SERVICING\"\n[8] cell \"Signed in as operator1. Use the menu on the left to service member accounts.\" frame=main\n[9] cell \"Daily posting completed 06:12. Core host: MCS-PROD-02.\" frame=main\n[10] cell \"Meridian Financial Systems (fictional). Unauthorized access is prohibited.\" frame=main\n[11] cell \"Signed in: operator1\" frame=nav\nVisible text of the main frame:\nMERIDIAN CORE SERVICING Release 4.2.117 | operator1 Welcome Signed in as operator1. Use the menu on the left to service member accounts. Daily posting completed 06:12. Core host: MCS-PROD-02. Meridian Financial Systems (fictional). Unauthorized access is prohibited."
+      }
+    ]
+  },
+  {
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "call_zargsmh1",
+        "name": "click",
+        "input": {
+          "ref": 2,
+          "why": "Navigate to the Member Lookup page."
+        }
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "tool_result",
+        "tool_use_id": "call_zargsmh1",
+        "content": "Done.",
+        "is_error": false
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "URL: /main/members   [HTTP 200]\nHeading: Member Lookup\nControls you can act on (use the ref number):\n[1] textbox \"Member Number\" frame=main\n[2] button \"Search\" frame=main\n[3] button \"Clear\" frame=main\n[4] link \"Home\" frame=nav\n[5] link \"Member Lookup\" frame=nav\n[6] link \"Reports\" frame=nav\n[7] link \"Sign Out\" frame=nav\nText and table cells on the page (read only, extract by ref):\n[8] heading \"Member Lookup\" frame=main\n[9] cell \"MERIDIAN CORE SERVICING\" frame=main\n[10] cell \"Release 4.2.117 |\" frame=main row=\"MERIDIAN CORE SERVICING\"\n[11] cell \"Member Number\" frame=main\n[12] cell \"Enter the numeric member number exactly as printed on the member card.\" frame=main\n[13] cell \"Meridian Financial Systems (fictional). Unauthorized access is prohibited.\" frame=main\n[14] cell \"Signed in: operator1\" frame=nav\nVisible text of the main frame:\nMERIDIAN CORE SERVICING Release 4.2.117 | Member Lookup Member Number Enter the numeric member number exactly as printed on the member card. Meridian Financial Systems (fictional). Unauthorized access is prohibited."
+      }
+    ]
+  },
+  {
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "call_xi78nzle",
+        "name": "type",
+        "input": {
+          "ref": 1,
+          "text": "100234",
+          "submit": true,
+          "why": "Enter the member number to search for."
+        }
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "tool_result",
+        "tool_use_id": "call_xi78nzle",
+        "content": "Done.",
+        "is_error": false
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "URL: /main/members/100234   [HTTP 200]\nHeading: Member Profile\nControls you can act on (use the ref number):\n[1] link \"New Sub-Account\" frame=main\n[2] link \"Back to Lookup\" frame=main row=\"New Sub-Account\"\n[3] link \"Home\" frame=nav\n[4] link \"Member Lookup\" frame=nav\n[5] link \"Reports\" frame=nav\n[6] link \"Sign Out\" frame=nav\nText and table cells on the page (read only, extract by ref):\n[7] heading \"Member Profile\" frame=main\n[8] heading \"Accounts\" frame=main\n[9] cell \"MERIDIAN CORE SERVICING\" frame=main\n[10] cell \"Release 4.2.117 |\" frame=main row=\"MERIDIAN CORE SERVICING\"\n[11] cell \"Member Number\" frame=main\n[12] cell \"100234\" frame=main row=\"Member Number\"\n[13] cell \"Name\" frame=main\n[14] cell \"Priya Natarajan\" frame=main row=\"Name\"\n[15] cell \"Member Since\" frame=main\n[16] cell \"03/14/2011\" frame=main row=\"Member Since\"\n[17] cell \"SSN\" frame=main\n[18] cell \"***-**-4821\" frame=main row=\"SSN\"\n[19] cell \"Address\" frame=main\n[20] cell \"18 Alder Ct, Fremont CA 94536\" frame=main row=\"Address\"\n[21] cell \"Account\" frame=main\n[22] cell \"Type\" frame=main row=\"Account\"\n[23] cell \"Status\" frame=main row=\"Account\"\n[24] cell \"Current Balance\" frame=main row=\"Account\"\n[25] cell \"Available\" frame=main row=\"Account\"\n[26] cell \"100234-S01\" frame=main column=\"Account\"\n[27] cell \"Savings\" frame=main row=\"100234-S01\" column=\"Type\"\n[28] cell \"Open\" frame=main row=\"100234-S01\" column=\"Status\"\n[29] cell \"$4,812.55\" frame=main row=\"100234-S01\" column=\"Current Balance\"\n[30] cell \"$4,812.55\" frame=main row=\"100234-S01\" column=\"Available\"\n[31] cell \"100234-C01\" frame=main column=\"Account\"\n[32] cell \"Checking\" frame=main row=\"100234-C01\" column=\"Type\"\n[33] cell \"Open\" frame=main row=\"100234-C01\" column=\"Status\"\n[34] cell \"$1,203.10\" frame=main row=\"100234-C01\" column=\"Current Balance\"\n[35] cell \"$1,153.10\" frame=main row=\"100234-C01\" column=\"Available\"\n[36] cell \"|\" frame=main row=\"New Sub-Account\"\n[37] cell \"Meridian Financial Systems (fictional). Unauthorized access is prohibited.\" frame=main\n[38] cell \"Signed in: operator1\" frame=nav\nVisible text of the main frame:\nMERIDIAN CORE SERVICING Release 4.2.117 | Member Profile Member Number 100234 Name Priya Natarajan Member Since 03/14/2011 SSN ***-**-4821 Address 18 Alder Ct, Fremont CA 94536 Accounts Account Type Status Current Balance Available 100234-S01 Savings Open $4,812.55 $4,812.55 100234-C01 Checking Open $1,203.10 $1,153.10 New Sub-Account | Back to Lookup Meridian Financial Systems (fictional). Unauthorized access is prohibited."
+      }
+    ]
+  },
+  {
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "call_wxtu54i4",
+        "name": "extract",
+        "input": {
+          "name": "savings_balance",
+          "ref": 29,
+          "why": "Extract the current balance of the savings account."
+        }
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "tool_result",
+        "tool_use_id": "call_wxtu54i4",
+        "content": "Recorded savings_balance = '4812.55'.",
+        "is_error": false
+      }
+    ]
+  },
+  {
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "call_1v5rdi81",
+        "name": "extract",
+        "input": {
+          "why": "Extract the member's full name.",
+          "name": "member_name",
+          "ref": 14
+        }
+      }
+    ]
+  },
+  {
+    "role": "user",
+    "content": [
+      {
+        "type": "tool_result",
+        "tool_use_id": "call_1v5rdi81",
+        "content": "Recorded member_name = 'Priya Natarajan'.",
+        "is_error": false
+      }
+    ]
+  },
+  {
+    "role": "assistant",
+    "content": [
+      {
+        "type": "tool_use",
+        "id": "call_yu55lp3j",
+        "name": "done",
+        "input": {
+          "summary": "Member 100234's Savings account balance is $4,812.55 and their full name is Priya Natarajan."
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,205 @@
+{
+  "schema_version": "1",
+  "id": "member_savings_balance",
+  "version": 1,
+  "status": "draft",
+  "title": "Read a member's current savings balance",
+  "description": "Looks up a member by member number in Meridian and returns the current balance of their Savings account along with the member's name.",
+  "app": {
+    "profile": "meridian",
+    "version": "4.2",
+    "entry": "/main/home"
+  },
+  "inputs": {
+    "member_id": {
+      "type": "integer",
+      "description": "Member number as printed on the member card",
+      "required": true,
+      "sensitive": false,
+      "pattern": "^\\d{6}$",
+      "example": "100234"
+    }
+  },
+  "outputs": {
+    "savings_balance": {
+      "type": "money",
+      "description": "Current balance of the member's Savings account",
+      "source": {
+        "describe": "the 'Current Balance' cell of the row '{member_id}-S01' in the main frame",
+        "role": "cell",
+        "name": "$4,812.55",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "table_cell",
+            "value": "{\"row\": \"Savings\", \"column\": \"Current Balance\"}",
+            "note": "the row containing 'Savings', under the 'Current Balance' column"
+          },
+          {
+            "strategy": "row_label",
+            "value": "{member_id}-S01",
+            "note": "label in the first cell of the same table row; how legacy forms are laid out"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(3) > tbody > tr:nth-of-type(3) > td:nth-of-type(4)",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[744, 340, 325, 31]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "parse": "money"
+    },
+    "member_name": {
+      "type": "string",
+      "description": "The member's full name as shown on the profile",
+      "source": {
+        "describe": "the value next to 'Name' in the main frame",
+        "role": "cell",
+        "name": "Priya Natarajan",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "row_label",
+            "value": "Name",
+            "note": "label in the first cell of the same table row; how legacy forms are laid out"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(2)",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[357, 119, 912, 31]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "parse": "text"
+    }
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "action": "click",
+      "target": {
+        "describe": "the 'Member Lookup' link in the nav frame",
+        "role": "link",
+        "name": "Member Lookup",
+        "frame": [
+          "nav"
+        ],
+        "locators": [
+          {
+            "strategy": "role",
+            "value": "Member Lookup",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "text",
+            "value": "Member Lookup",
+            "note": "exact visible text"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table > tbody > tr:nth-of-type(4) > td > a",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[7, 93, 128, 19]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "on_url": "/main/home",
+      "expect": {
+        "url": "/main/members",
+        "heading": "Member Lookup",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "Navigate to the Member Lookup page."
+    },
+    {
+      "id": "s2",
+      "action": "type",
+      "target": {
+        "describe": "the 'Member Number' textbox in the main frame",
+        "role": "textbox",
+        "name": "Member Number",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "row_label",
+            "value": "Member Number",
+            "note": "label in the first cell of the same table row; how legacy forms are laid out"
+          },
+          {
+            "strategy": "role",
+            "value": "Member Number",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(2) > td:nth-of-type(2) > input",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[363, 92, 121, 21]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "value": {
+        "param": "member_id"
+      },
+      "on_url": "/main/members",
+      "expect": {
+        "url": "/main/members",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "Enter the member number to search for."
+    },
+    {
+      "id": "s3",
+      "action": "press",
+      "key": "Enter",
+      "on_url": "/main/members",
+      "expect": {
+        "url": "/main/members/{member_id}",
+        "heading": "Member Profile",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "submit the form with Enter"
+    }
+  ],
+  "success": {
+    "url": "/main/members/{member_id}",
+    "heading": "Member Profile",
+    "timeout_ms": 10000
+  },
+  "outcomes": [],
+  "risk": "safe",
+  "provenance": {
+    "recorded_at": "2026-09-12T08:05:52+00:00",
+    "model": "qwen2.5:7b",
+    "endpoint": "http://127.0.0.1:11434/v1",
+    "discovery_run": "discovery-20260912-080532-2318",
+    "teller_version": "0.1.0"
+  }
+}

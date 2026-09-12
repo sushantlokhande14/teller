@@ -1,0 +1,547 @@
+{
+ "url": "http://127.0.0.1:5057/main/members/100877/subaccounts/new",
+ "path": "/main/members/100877/subaccounts/new",
+ "title": "Meridian Core Servicing v4.2",
+ "heading": "New Sub-Account",
+ "text": "MERIDIAN CORE SERVICING Release 4.2.117 | New Sub-Account Member 100877 Marcus Bell Product Savings Money Market Certificate Nickname Initial Deposit $ Cancel Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+ "elements": [
+  {
+   "ref": 1,
+   "role": "combobox",
+   "name": "Product",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    363.0,
+    125.0,
+    107,
+    19
+   ],
+   "tag": "select",
+   "name_source": "row",
+   "value": "Savings",
+   "row_label": "Product",
+   "row_cells": [
+    "Product",
+    "Savings Money Market Certificate"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [
+    "Savings",
+    "Money Market",
+    "Certificate"
+   ],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(2) > select"
+  },
+  {
+   "ref": 2,
+   "role": "textbox",
+   "name": "Nickname",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    363.0,
+    158.0,
+    247,
+    21
+   ],
+   "tag": "input",
+   "name_source": "row",
+   "value": "Holiday",
+   "row_label": "Nickname",
+   "row_cells": [
+    "Nickname",
+    ""
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(4) > td:nth-of-type(2) > input"
+  },
+  {
+   "ref": 3,
+   "role": "textbox",
+   "name": "Initial Deposit",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    378.796875,
+    194.0,
+    107,
+    21
+   ],
+   "tag": "input",
+   "name_source": "row",
+   "value": "0.00",
+   "row_label": "Initial Deposit",
+   "row_cells": [
+    "Initial Deposit",
+    "$"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(5) > td:nth-of-type(2) > input"
+  },
+  {
+   "ref": 4,
+   "role": "button",
+   "name": "Review",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    363.0,
+    230.0,
+    59.71875,
+    21
+   ],
+   "tag": "input",
+   "name_source": "content",
+   "value": "",
+   "row_label": "",
+   "row_cells": [
+    "",
+    "Cancel"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(6) > td:nth-of-type(2) > input"
+  },
+  {
+   "ref": 5,
+   "role": "link",
+   "name": "Cancel",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    439.59375,
+    229.0,
+    53.171875,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "",
+   "row_cells": [
+    "",
+    "Cancel"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/members/100877",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(6) > td:nth-of-type(2) > a"
+  },
+  {
+   "ref": 6,
+   "role": "link",
+   "name": "Home",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    68.0,
+    46.828125,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Home",
+   "row_cells": [
+    "Home"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/home",
+   "css": "body > font > table > tbody > tr:nth-of-type(3) > td > a"
+  },
+  {
+   "ref": 7,
+   "role": "link",
+   "name": "Member Lookup",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    93.0,
+    128.421875,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Member Lookup",
+   "row_cells": [
+    "Member Lookup"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/members",
+   "css": "body > font > table > tbody > tr:nth-of-type(4) > td > a"
+  },
+  {
+   "ref": 8,
+   "role": "link",
+   "name": "Reports",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    118.0,
+    61.421875,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Reports",
+   "row_cells": [
+    "Reports"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/reports",
+   "css": "body > font > table > tbody > tr:nth-of-type(5) > td > a"
+  },
+  {
+   "ref": 9,
+   "role": "link",
+   "name": "Sign Out",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    167.0,
+    70.078125,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Sign Out",
+   "row_cells": [
+    "Sign Out"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/logout",
+   "css": "body > font > table > tbody > tr:nth-of-type(7) > td > a"
+  },
+  {
+   "ref": 10,
+   "role": "heading",
+   "name": "New Sub-Account",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    189.0,
+    56.0,
+    179.1875,
+    22
+   ],
+   "tag": "b",
+   "name_source": "content",
+   "value": "",
+   "row_label": "",
+   "row_cells": [],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(1) > td > font > b"
+  },
+  {
+   "ref": 11,
+   "role": "cell",
+   "name": "MERIDIAN CORE SERVICING",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    180.0,
+    8.0,
+    789.4375,
+    23
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "MERIDIAN CORE SERVICING",
+   "row_cells": [
+    "MERIDIAN CORE SERVICING",
+    "Release 4.2.117 |"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(1) > tbody > tr > td:nth-of-type(1)"
+  },
+  {
+   "ref": 12,
+   "role": "cell",
+   "name": "Release 4.2.117 |",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    969.4375,
+    8.0,
+    302.5625,
+    23
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "MERIDIAN CORE SERVICING",
+   "row_cells": [
+    "MERIDIAN CORE SERVICING",
+    "Release 4.2.117 |"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(1) > tbody > tr > td:nth-of-type(2)"
+  },
+  {
+   "ref": 13,
+   "role": "cell",
+   "name": "Member",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    183.0,
+    86.0,
+    172,
+    31
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Member",
+   "row_cells": [
+    "Member",
+    "100877 Marcus Bell"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(2) > td:nth-of-type(1)"
+  },
+  {
+   "ref": 14,
+   "role": "cell",
+   "name": "100877 Marcus Bell",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    357.0,
+    86.0,
+    912,
+    31
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Member",
+   "row_cells": [
+    "Member",
+    "100877 Marcus Bell"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(2) > td:nth-of-type(2)"
+  },
+  {
+   "ref": 15,
+   "role": "cell",
+   "name": "Product",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    183.0,
+    119.0,
+    172,
+    31
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Product",
+   "row_cells": [
+    "Product",
+    "Savings Money Market Certificate"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(1)"
+  },
+  {
+   "ref": 16,
+   "role": "cell",
+   "name": "Nickname",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    183.0,
+    152.0,
+    172,
+    33
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Nickname",
+   "row_cells": [
+    "Nickname",
+    ""
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(4) > td:nth-of-type(1)"
+  },
+  {
+   "ref": 17,
+   "role": "cell",
+   "name": "Initial Deposit",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    183.0,
+    187.0,
+    172,
+    34
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Initial Deposit",
+   "row_cells": [
+    "Initial Deposit",
+    "$"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(5) > td:nth-of-type(1)"
+  },
+  {
+   "ref": 18,
+   "role": "cell",
+   "name": "Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    182.0,
+    278.0,
+    1088,
+    14
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+   "row_cells": [
+    "Meridian Financial Systems (fictional). Unauthorized access is prohibited."
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(3) > tbody > tr > td"
+  },
+  {
+   "ref": 19,
+   "role": "cell",
+   "name": "Signed in: operator1",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    4.0,
+    4.0,
+    162,
+    37
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Signed in: operator1",
+   "row_cells": [
+    "Signed in: operator1"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table > tbody > tr:nth-of-type(1) > td"
+  }
+ ],
+ "http_status": 200,
+ "frames": [
+  [],
+  [
+   "nav"
+  ],
+  [
+   "main"
+  ]
+ ],
+ "taken_at": "2026-09-12T08:07:47+00:00"
+}

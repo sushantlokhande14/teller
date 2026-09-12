@@ -1,0 +1,12 @@
+======================================================================
+INTERVENTION h1  kind=approval  step=s8
+reason:      click on 'Confirm Open' is risky; a person must confirm
+capability:  open_savings_subaccount v1
+goal:        Open a new savings sub-account for a member
+url:         /main/members/100877/subaccounts/review
+heading:     Review New Sub-Account
+screenshot:  runs\replay-20260912-080741-00a9\screens\handoff-h1.png
+cdp_endpoint:http://127.0.0.1:9333
+======================================================================
+replied: aborted
+run finished; handled 1 request(s)

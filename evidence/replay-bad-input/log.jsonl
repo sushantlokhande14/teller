@@ -1,0 +1,2 @@
+{"seq": 1, "t_ms": 561, "at": "2026-09-12T08:06:03.624+00:00", "event": "replay.start", "capability": "member_savings_balance", "version": 1, "status": "approved", "fingerprint": "ad474901f2cd1165", "inputs": {"member_id": "12"}}
+{"seq": 2, "t_ms": 561, "at": "2026-09-12T08:06:03.624+00:00", "event": "replay.end", "status": "failure", "failure": {"code": "bad_input", "expected": "inputs matching the contract", "observed": "input 'member_id' does not match '^\\\\d{6}$'", "evidence": {}}}

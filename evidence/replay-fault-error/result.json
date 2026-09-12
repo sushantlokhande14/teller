@@ -1,0 +1,25 @@
+{
+  "status": "failure",
+  "capability": "member_savings_balance",
+  "version": 1,
+  "run_id": "replay-20260912-080627-8521",
+  "inputs": {
+    "member_id": "100234"
+  },
+  "failure": {
+    "code": "fatal_condition",
+    "step_id": "s1",
+    "expected": "url=/main/members; heading='Member Lookup'",
+    "observed": "Reference: ORA-01555 snapshot too old.",
+    "condition_id": "app_error",
+    "evidence": {
+      "screenshot": "screens\\failure-s1.png",
+      "snapshot": "snapshots\\failure-s1.json",
+      "log": "log.jsonl"
+    }
+  },
+  "steps": [],
+  "handoffs": [],
+  "duration_ms": 1718,
+  "run_dir": "runs\\replay-20260912-080627-8521"
+}

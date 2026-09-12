@@ -1,0 +1,369 @@
+{
+  "schema_version": "1",
+  "id": "open_savings_subaccount",
+  "version": 1,
+  "status": "draft",
+  "title": "Open a new savings sub-account for a member",
+  "description": "Opens a new Savings sub-account for an existing member in Meridian with the given nickname and initial deposit, confirms it, and returns the new account number. This posts a change to the core; the confirm step is risky and needs sign-off.",
+  "app": {
+    "profile": "meridian",
+    "version": "4.2",
+    "entry": "/main/home"
+  },
+  "inputs": {
+    "member_id": {
+      "type": "integer",
+      "description": "Member number as printed on the member card",
+      "required": true,
+      "sensitive": false,
+      "pattern": "^\\d{6}$",
+      "example": "100234"
+    },
+    "nickname": {
+      "type": "string",
+      "description": "Friendly name for the new sub-account",
+      "required": true,
+      "sensitive": false,
+      "example": "Vacation fund"
+    },
+    "deposit": {
+      "type": "money",
+      "description": "Initial deposit in dollars, e.g. 25.00",
+      "required": true,
+      "sensitive": false,
+      "example": "25.00"
+    }
+  },
+  "outputs": {
+    "account_number": {
+      "type": "string",
+      "description": "The new sub-account number shown on the confirmation screen",
+      "source": {
+        "describe": "the value next to 'Account Number' in the main frame",
+        "role": "cell",
+        "name": "{member_id}-S02",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "row_label",
+            "value": "Account Number",
+            "note": "label in the first cell of the same table row; how legacy forms are laid out"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(2)",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[357, 121, 912, 31]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "parse": "text"
+    }
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "action": "click",
+      "target": {
+        "describe": "the 'Member Lookup' link in the nav frame",
+        "role": "link",
+        "name": "Member Lookup",
+        "frame": [
+          "nav"
+        ],
+        "locators": [
+          {
+            "strategy": "role",
+            "value": "Member Lookup",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "text",
+            "value": "Member Lookup",
+            "note": "exact visible text"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table > tbody > tr:nth-of-type(4) > td > a",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[7, 93, 128, 19]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "on_url": "/main/home",
+      "expect": {
+        "url": "/main/members",
+        "heading": "Member Lookup",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "Navigate to the member lookup screen to locate member 100234."
+    },
+    {
+      "id": "s2",
+      "action": "type",
+      "target": {
+        "describe": "the 'Member Number' textbox in the main frame",
+        "role": "textbox",
+        "name": "Member Number",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "row_label",
+            "value": "Member Number",
+            "note": "label in the first cell of the same table row; how legacy forms are laid out"
+          },
+          {
+            "strategy": "role",
+            "value": "Member Number",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(2) > td:nth-of-type(2) > input",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[363, 92, 121, 21]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "value": {
+        "param": "member_id"
+      },
+      "on_url": "/main/members",
+      "expect": {
+        "url": "/main/members",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "Enter member ID 100234 and search."
+    },
+    {
+      "id": "s3",
+      "action": "press",
+      "key": "Enter",
+      "on_url": "/main/members",
+      "expect": {
+        "url": "/main/members/{member_id}",
+        "heading": "Member Profile",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "submit the form with Enter"
+    },
+    {
+      "id": "s4",
+      "action": "click",
+      "target": {
+        "describe": "the 'New Sub-Account' link in the main frame",
+        "role": "link",
+        "name": "New Sub-Account",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "role",
+            "value": "New Sub-Account",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "text",
+            "value": "New Sub-Account",
+            "note": "exact visible text"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(4) > tbody > tr > td:nth-of-type(1) > a",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[183, 426, 142, 19]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "on_url": "/main/members/{member_id}",
+      "expect": {
+        "url": "/main/members/{member_id}/subaccounts/new",
+        "heading": "New Sub-Account",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "Open the form to create a new sub-account for member 100234."
+    },
+    {
+      "id": "s5",
+      "action": "type",
+      "target": {
+        "describe": "the 'Nickname' textbox in the main frame",
+        "role": "textbox",
+        "name": "Nickname",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "row_label",
+            "value": "Nickname",
+            "note": "label in the first cell of the same table row; how legacy forms are laid out"
+          },
+          {
+            "strategy": "role",
+            "value": "Nickname",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(4) > td:nth-of-type(2) > input",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[363, 158, 247, 21]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "value": {
+        "param": "nickname"
+      },
+      "on_url": "/main/members/{member_id}/subaccounts/new",
+      "expect": {
+        "url": "/main/members/{member_id}/subaccounts/new",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "Enter the nickname Vacation fund for the new sub-account."
+    },
+    {
+      "id": "s6",
+      "action": "type",
+      "target": {
+        "describe": "the 'Initial Deposit' textbox in the main frame",
+        "role": "textbox",
+        "name": "Initial Deposit",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "row_label",
+            "value": "Initial Deposit",
+            "note": "label in the first cell of the same table row; how legacy forms are laid out"
+          },
+          {
+            "strategy": "role",
+            "value": "Initial Deposit",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(5) > td:nth-of-type(2) > input",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[379, 194, 107, 21]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "value": {
+        "param": "deposit"
+      },
+      "on_url": "/main/members/{member_id}/subaccounts/new",
+      "expect": {
+        "url": "/main/members/{member_id}/subaccounts/new",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "Enter the initial deposit of 25.00 for the new sub-account."
+    },
+    {
+      "id": "s7",
+      "action": "press",
+      "key": "Enter",
+      "on_url": "/main/members/{member_id}/subaccounts/new",
+      "expect": {
+        "url": "/main/members/{member_id}/subaccounts/review",
+        "heading": "Review New Sub-Account",
+        "timeout_ms": 10000
+      },
+      "risk": "safe",
+      "why": "submit the form with Enter"
+    },
+    {
+      "id": "s8",
+      "action": "click",
+      "target": {
+        "describe": "the 'Confirm Open' button in the main frame",
+        "role": "button",
+        "name": "Confirm Open",
+        "frame": [
+          "main"
+        ],
+        "locators": [
+          {
+            "strategy": "role",
+            "value": "Confirm Open",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "text",
+            "value": "Confirm Open",
+            "note": "exact visible text"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(7) > td:nth-of-type(2) > button",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[363, 260, 99, 21]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
+      "on_url": "/main/members/{member_id}/subaccounts/review",
+      "expect": {
+        "url": "/main/members/{member_id}/subaccounts/*",
+        "heading": "Sub-Account Opened",
+        "timeout_ms": 10000
+      },
+      "risk": "risky",
+      "why": "Confirm the opening of the new sub-account to proceed with the action."
+    }
+  ],
+  "success": {
+    "url": "/main/members/{member_id}/subaccounts/*",
+    "heading": "Sub-Account Opened",
+    "timeout_ms": 10000
+  },
+  "outcomes": [],
+  "risk": "risky",
+  "provenance": {
+    "recorded_at": "2026-09-12T08:07:20+00:00",
+    "model": "qwen2.5:7b",
+    "endpoint": "http://127.0.0.1:11434/v1",
+    "discovery_run": "discovery-20260912-080647-8368",
+    "teller_version": "0.1.0"
+  }
+}

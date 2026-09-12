@@ -1,0 +1,290 @@
+{
+ "url": "http://127.0.0.1:5057/main/members",
+ "path": "/main/members",
+ "title": "Meridian Core Servicing v4.2",
+ "heading": "Application Error",
+ "text": "MERIDIAN CORE SERVICING Release 4.2.117 | Application Error The request could not be completed. Reference: ORA-01555 snapshot too old. Please contact the help desk. Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+ "elements": [
+  {
+   "ref": 1,
+   "role": "link",
+   "name": "Home",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    68.0,
+    46.828125,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Home",
+   "row_cells": [
+    "Home"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/home",
+   "css": "body > font > table > tbody > tr:nth-of-type(3) > td > a"
+  },
+  {
+   "ref": 2,
+   "role": "link",
+   "name": "Member Lookup",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    93.0,
+    128.421875,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Member Lookup",
+   "row_cells": [
+    "Member Lookup"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/members",
+   "css": "body > font > table > tbody > tr:nth-of-type(4) > td > a"
+  },
+  {
+   "ref": 3,
+   "role": "link",
+   "name": "Reports",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    118.0,
+    61.421875,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Reports",
+   "row_cells": [
+    "Reports"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/reports",
+   "css": "body > font > table > tbody > tr:nth-of-type(5) > td > a"
+  },
+  {
+   "ref": 4,
+   "role": "link",
+   "name": "Sign Out",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    167.0,
+    70.078125,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Sign Out",
+   "row_cells": [
+    "Sign Out"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/logout",
+   "css": "body > font > table > tbody > tr:nth-of-type(7) > td > a"
+  },
+  {
+   "ref": 5,
+   "role": "heading",
+   "name": "Application Error",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    189.0,
+    56.0,
+    171.25,
+    22
+   ],
+   "tag": "b",
+   "name_source": "content",
+   "value": "",
+   "row_label": "",
+   "row_cells": [],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(1) > td > font > b"
+  },
+  {
+   "ref": 6,
+   "role": "cell",
+   "name": "MERIDIAN CORE SERVICING",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    180.0,
+    8.0,
+    789.4375,
+    23
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "MERIDIAN CORE SERVICING",
+   "row_cells": [
+    "MERIDIAN CORE SERVICING",
+    "Release 4.2.117 |"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(1) > tbody > tr > td:nth-of-type(1)"
+  },
+  {
+   "ref": 7,
+   "role": "cell",
+   "name": "Release 4.2.117 |",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    969.4375,
+    8.0,
+    302.5625,
+    23
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "MERIDIAN CORE SERVICING",
+   "row_cells": [
+    "MERIDIAN CORE SERVICING",
+    "Release 4.2.117 |"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(1) > tbody > tr > td:nth-of-type(2)"
+  },
+  {
+   "ref": 8,
+   "role": "cell",
+   "name": "The request could not be completed. Reference: ORA-01555 snapshot too old. Please contact the help desk.",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    183.0,
+    86.0,
+    1086,
+    31
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "The request could not be completed. Reference: ORA-01555 snapshot too old. Please contact the help desk.",
+   "row_cells": [
+    "The request could not be completed. Reference: ORA-01555 snapshot too old. Please contact the help desk."
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(2) > td"
+  },
+  {
+   "ref": 9,
+   "role": "cell",
+   "name": "Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    182.0,
+    138.0,
+    1088,
+    14
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+   "row_cells": [
+    "Meridian Financial Systems (fictional). Unauthorized access is prohibited."
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(3) > tbody > tr > td"
+  },
+  {
+   "ref": 10,
+   "role": "cell",
+   "name": "Signed in: operator1",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    4.0,
+    4.0,
+    162,
+    37
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Signed in: operator1",
+   "row_cells": [
+    "Signed in: operator1"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table > tbody > tr:nth-of-type(1) > td"
+  }
+ ],
+ "http_status": 500,
+ "frames": [
+  [],
+  [
+   "nav"
+  ],
+  [
+   "main"
+  ]
+ ],
+ "taken_at": "2026-09-12T08:06:29+00:00"
+}

@@ -43,10 +43,26 @@ python -m playwright install chromium
 cp .env.example .env
 ```
 
-`.env` needs `ANTHROPIC_API_KEY` for discovery runs (replay never calls the model).
-The demo sign-in for the sample app is already in there: the surface signs in with
-`MERIDIAN_USER` / `MERIDIAN_PASS` before the model gets control, so the model
-never sees or types a credential.
+Discovery needs a model. Replay never calls one, so most of this repo runs with no
+model at all. The model is a seam with three implementations: Anthropic (the
+default), any OpenAI-compatible endpoint, and a scripted stand-in used by the tests.
+
+The evidence in this repo was recorded with a local model through Ollama, which
+costs nothing and needs no account:
+
+```bash
+ollama pull qwen2.5:7b
+python -m teller discover contracts/member_savings_balance.json --input member_id=100234 --provider ollama --model qwen2.5:7b
+```
+
+To use Claude instead, put `ANTHROPIC_API_KEY` in `.env` and drop the two flags.
+`--provider groq|gemini|openrouter|openai` reads the matching key from the
+environment, and `--api-base` points at anything else that speaks the same
+protocol. Pass `--vision` if the model accepts images.
+
+The demo sign-in for the sample app is already in `.env.example`: the surface signs
+in with `MERIDIAN_USER` / `MERIDIAN_PASS` before the model gets control, so the
+model never sees or types a credential.
 
 Start the target app in its own terminal and leave it running:
 
@@ -60,11 +76,11 @@ python -m meridian        # http://127.0.0.1:5057, sign in as operator1 / teller
 in `contracts/member_savings_balance.json`. The model figures out the *how*.
 
 ```bash
-python -m teller discover contracts/member_savings_balance.json --input member_id=100234 --headed
+python -m teller discover contracts/member_savings_balance.json --input member_id=100234 --provider ollama --model qwen2.5:7b --headed
 ```
 
-This signs in, hands the model the live screen (numbered controls plus a screenshot
-carrying the same numbers), and records what it does. On success it writes
+This signs in, hands the model the live screen (numbered controls, plus a screenshot
+carrying the same numbers for models that take images), and records what it does. On success it writes
 `capabilities/member_savings_balance.json` and a run directory under `runs/` with
 the full log, the screenshots, and the redacted model transcript.
 
@@ -136,7 +152,7 @@ over CDP, performs the click, and replies.
 the confirm click risky, so both discovery and replay stop for approval.
 
 ```bash
-python -m teller discover contracts/open_savings_subaccount.json --input member_id=100234 --input "nickname=Vacation fund" --input deposit=25.00 --operator scripts/operator_approve.json
+python -m teller discover contracts/open_savings_subaccount.json --input member_id=100234 --input "nickname=Vacation fund" --input deposit=25.00 --provider ollama --model qwen2.5:7b --operator scripts/operator_approve.json
 python -m teller approve capabilities/open_savings_subaccount.json --by your-name
 python -m teller replay capabilities/open_savings_subaccount.json --input member_id=100234 --input "nickname=Rainy day" --input deposit=40.00 --operator scripts/operator_approve.json
 python -m teller replay capabilities/open_savings_subaccount.json --input member_id=100877 --input nickname=Holiday --input deposit=10.00 --operator scripts/operator_decline.json
@@ -149,25 +165,26 @@ python -m teller catalog
 python -m teller catalog --tools     # function-calling tool definitions generated from the capabilities
 ```
 
-## Running without live services
+## Running without any model
 
-Everything except the discovery run itself works without an API key.
+The tests never call a model, so the whole suite runs offline.
 
 ```bash
-python -m teller discover contracts/member_savings_balance.json --input member_id=100234 --scripted scripts/scripted_model_lookup.json
 pytest -q -m "not e2e"     # unit tests, no browser
 pytest -q -m e2e           # starts the sample app in-process, drives real Chromium, scripted model
+python -m teller discover contracts/member_savings_balance.json --input member_id=100234 --scripted scripts/scripted_model_lookup.json
 ```
 
 The scripted model is a stand-in that names controls by role and label instead of
-by ref; it goes through the same loop, policy checks, recorder and replay as the
-real model. It is for tests and pipeline checks only. `evidence/README.md` and
-each capability's `provenance.model` record which model actually drove a run.
+by ref. It goes through the same loop, policy checks, recorder and replay as a real
+model, which is what makes the end-to-end tests deterministic, and it is for tests
+only. `evidence/README.md` and each capability's `provenance.model` and
+`provenance.endpoint` record which model actually drove a run.
 
-To regenerate the evidence folder end to end (needs the API key and the sample app running):
+To regenerate the evidence folder end to end, with the sample app running:
 
 ```bash
-python scripts/make_evidence.py
+python scripts/make_evidence.py --provider ollama --model qwen2.5:7b
 ```
 
 ## Notes

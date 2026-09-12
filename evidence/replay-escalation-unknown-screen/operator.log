@@ -1,0 +1,14 @@
+======================================================================
+INTERVENTION h1  kind=unknown_state  step=s1
+reason:      unexpected screen at step s1: heading is 'Security Alert', expected 'Member Lookup'
+capability:  member_savings_balance v1
+goal:        Read a member's current savings balance
+url:         /main/members
+heading:     Security Alert
+screenshot:  runs\replay-20260912-080630-d9d6\screens\handoff-h1.png
+cdp_endpoint:http://127.0.0.1:9333
+expected:    url=/main/members; heading='Member Lookup'
+observed:    heading is 'Security Alert', expected 'Member Lookup'
+======================================================================
+replied: resumed (password expiry alert; chose Remind Me Later so the run can continue)
+run finished; handled 1 request(s)

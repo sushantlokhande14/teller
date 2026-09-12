@@ -1,0 +1,19 @@
+{
+  "status": "failure",
+  "capability": "member_savings_balance",
+  "version": 1,
+  "run_id": "replay-20260912-080603-63ea",
+  "inputs": {
+    "member_id": "12"
+  },
+  "failure": {
+    "code": "bad_input",
+    "expected": "inputs matching the contract",
+    "observed": "input 'member_id' does not match '^\\\\d{6}$'",
+    "evidence": {}
+  },
+  "steps": [],
+  "handoffs": [],
+  "duration_ms": 0,
+  "run_dir": "runs\\replay-20260912-080603-63ea"
+}

@@ -1,0 +1,74 @@
+{
+  "status": "success",
+  "capability": "member_savings_balance",
+  "version": 1,
+  "run_id": "replay-20260912-080630-d9d6",
+  "inputs": {
+    "member_id": "100234"
+  },
+  "outputs": {
+    "savings_balance": "4812.55",
+    "member_name": "Priya Natarajan"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "status": "recovered",
+      "attempts": 1,
+      "locator_used": "operator",
+      "drift": false,
+      "recoveries": [
+        "handoff:h1"
+      ],
+      "duration_ms": 0
+    },
+    {
+      "id": "s2",
+      "status": "ok",
+      "attempts": 1,
+      "locator_used": "row_label",
+      "drift": false,
+      "recoveries": [],
+      "duration_ms": 875
+    },
+    {
+      "id": "s3",
+      "status": "ok",
+      "attempts": 1,
+      "drift": false,
+      "recoveries": [],
+      "duration_ms": 843
+    }
+  ],
+  "handoffs": [
+    {
+      "id": "h1",
+      "reason": "unexpected screen at step s1: heading is 'Security Alert', expected 'Member Lookup'",
+      "kind": "unknown_state",
+      "step_id": "s1",
+      "requested_at": "2026-09-12T08:06:42+00:00",
+      "resolved_at": "2026-09-12T08:06:44+00:00",
+      "resolution": "resumed",
+      "operator_note": "password expiry alert; chose Remind Me Later so the run can continue",
+      "human_actions": [
+        {
+          "at": "2026-09-12T08:06:43.627Z",
+          "kind": "click",
+          "detail": "input \"Remind Me Later\" in frame main"
+        },
+        {
+          "at": "2026-09-12T08:06:43.627Z",
+          "kind": "submit",
+          "detail": "form action=\"/main/surprise/later\""
+        },
+        {
+          "at": "2026-09-12T08:06:43.858Z",
+          "kind": "navigate",
+          "detail": "main -> /main/members"
+        }
+      ]
+    }
+  ],
+  "duration_ms": 15813,
+  "run_dir": "runs\\replay-20260912-080630-d9d6"
+}

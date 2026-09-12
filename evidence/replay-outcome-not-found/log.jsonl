@@ -1,0 +1,9 @@
+{"seq": 1, "t_ms": 594, "at": "2026-09-12T08:05:59.223+00:00", "event": "replay.start", "capability": "member_savings_balance", "version": 1, "status": "approved", "fingerprint": "ad474901f2cd1165", "inputs": {"member_id": "999999"}}
+{"seq": 2, "t_ms": 1625, "at": "2026-09-12T08:06:00.255+00:00", "event": "act", "step": "s1", "action": "click", "target": "the 'Member Lookup' link in the nav frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 3, "t_ms": 2266, "at": "2026-09-12T08:06:00.882+00:00", "event": "checkpoint.ok", "step": "s1", "attempts": 1}
+{"seq": 4, "t_ms": 2453, "at": "2026-09-12T08:06:01.074+00:00", "event": "act", "step": "s2", "action": "type", "target": "the 'Member Number' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "999999", "risk": "safe"}
+{"seq": 5, "t_ms": 3063, "at": "2026-09-12T08:06:01.686+00:00", "event": "checkpoint.ok", "step": "s2", "attempts": 1}
+{"seq": 6, "t_ms": 3234, "at": "2026-09-12T08:06:01.864+00:00", "event": "act", "step": "s3", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
+{"seq": 7, "t_ms": 3594, "at": "2026-09-12T08:06:02.213+00:00", "event": "checkpoint.failed", "step": "s3", "expected": "url=/main/members/999999; heading='Member Profile'", "observed": "url is /main/members/search, expected /main/members/999999"}
+{"seq": 8, "t_ms": 3594, "at": "2026-09-12T08:06:02.213+00:00", "event": "condition", "step": "s3", "id": "record_not_found", "kind": "outcome", "message": "No member found for number 999999.", "hit": 1}
+{"seq": 9, "t_ms": 3828, "at": "2026-09-12T08:06:02.452+00:00", "event": "replay.end", "status": "outcome", "outcome": {"code": "not_found", "message": "No member found for number 999999.", "step_id": "s3", "condition_id": "record_not_found"}}

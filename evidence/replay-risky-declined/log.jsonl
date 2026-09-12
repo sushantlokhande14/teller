@@ -1,0 +1,19 @@
+{"seq": 1, "t_ms": 546, "at": "2026-09-12T08:07:42.538+00:00", "event": "replay.start", "capability": "open_savings_subaccount", "version": 1, "status": "approved", "fingerprint": "09b0a956e72cd4f1", "inputs": {"member_id": "100877", "nickname": "Holiday", "deposit": "10.00"}}
+{"seq": 2, "t_ms": 1546, "at": "2026-09-12T08:07:43.549+00:00", "event": "act", "step": "s1", "action": "click", "target": "the 'Member Lookup' link in the nav frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 3, "t_ms": 2171, "at": "2026-09-12T08:07:44.163+00:00", "event": "checkpoint.ok", "step": "s1", "attempts": 1}
+{"seq": 4, "t_ms": 2359, "at": "2026-09-12T08:07:44.354+00:00", "event": "act", "step": "s2", "action": "type", "target": "the 'Member Number' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "100877", "risk": "safe"}
+{"seq": 5, "t_ms": 3000, "at": "2026-09-12T08:07:44.996+00:00", "event": "checkpoint.ok", "step": "s2", "attempts": 1}
+{"seq": 6, "t_ms": 3203, "at": "2026-09-12T08:07:45.194+00:00", "event": "act", "step": "s3", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
+{"seq": 7, "t_ms": 3844, "at": "2026-09-12T08:07:45.838+00:00", "event": "checkpoint.ok", "step": "s3", "attempts": 1}
+{"seq": 8, "t_ms": 4078, "at": "2026-09-12T08:07:46.073+00:00", "event": "act", "step": "s4", "action": "click", "target": "the 'New Sub-Account' link in the main frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 9, "t_ms": 4719, "at": "2026-09-12T08:07:46.721+00:00", "event": "checkpoint.ok", "step": "s4", "attempts": 1}
+{"seq": 10, "t_ms": 4921, "at": "2026-09-12T08:07:46.926+00:00", "event": "act", "step": "s5", "action": "type", "target": "the 'Nickname' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "Holiday", "risk": "safe"}
+{"seq": 11, "t_ms": 5563, "at": "2026-09-12T08:07:47.563+00:00", "event": "checkpoint.ok", "step": "s5", "attempts": 1}
+{"seq": 12, "t_ms": 5766, "at": "2026-09-12T08:07:47.763+00:00", "event": "act", "step": "s6", "action": "type", "target": "the 'Initial Deposit' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "10.00", "risk": "safe"}
+{"seq": 13, "t_ms": 6453, "at": "2026-09-12T08:07:48.446+00:00", "event": "checkpoint.ok", "step": "s6", "attempts": 1}
+{"seq": 14, "t_ms": 6641, "at": "2026-09-12T08:07:48.636+00:00", "event": "act", "step": "s7", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
+{"seq": 15, "t_ms": 7281, "at": "2026-09-12T08:07:49.272+00:00", "event": "checkpoint.ok", "step": "s7", "attempts": 1}
+{"seq": 16, "t_ms": 7578, "at": "2026-09-12T08:07:49.577+00:00", "event": "handoff.requested", "id": "h1", "kind": "approval", "reason": "click on 'Confirm Open' is risky; a person must confirm", "step_id": "s8", "screenshot": "runs\\replay-20260912-080741-00a9\\screens\\handoff-h1.png", "request_file": "runs\\replay-20260912-080741-00a9\\intervention.json"}
+{"seq": 17, "t_ms": 8125, "at": "2026-09-12T08:07:50.115+00:00", "event": "handoff.resolved", "id": "h1", "resolution": "aborted", "note": "declined: the deposit amount on the review screen does not match the request", "resume_from": "retry_step", "actions": 0}
+{"seq": 18, "t_ms": 8125, "at": "2026-09-12T08:07:50.115+00:00", "event": "failure", "code": "operator_abort", "step": "s8", "expected": "operator approval", "observed": "declined: the deposit amount on the review screen does not match the request", "condition": null}
+{"seq": 19, "t_ms": 8125, "at": "2026-09-12T08:07:50.115+00:00", "event": "replay.end", "status": "failure", "failure": {"code": "operator_abort", "step_id": "s8", "expected": "operator approval", "observed": "declined: the deposit amount on the review screen does not match the request", "evidence": {"log": "log.jsonl"}}}

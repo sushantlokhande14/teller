@@ -1,0 +1,402 @@
+{
+ "url": "http://127.0.0.1:5057/main/members",
+ "path": "/main/members",
+ "title": "Meridian Core Servicing v4.2",
+ "heading": "Member Lookup",
+ "text": "MERIDIAN CORE SERVICING Release 4.2.117 | Member Lookup Member Number Enter the numeric member number exactly as printed on the member card. Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+ "elements": [
+  {
+   "ref": 1,
+   "role": "textbox",
+   "name": "Member Number",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    363.0,
+    92.0,
+    121,
+    21
+   ],
+   "tag": "input",
+   "name_source": "row",
+   "value": "999999",
+   "row_label": "Member Number",
+   "row_cells": [
+    "Member Number",
+    ""
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(2) > td:nth-of-type(2) > input"
+  },
+  {
+   "ref": 2,
+   "role": "button",
+   "name": "Search",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    363.0,
+    128.0,
+    58.25,
+    21
+   ],
+   "tag": "input",
+   "name_source": "content",
+   "value": "",
+   "row_label": "",
+   "row_cells": [
+    "",
+    ""
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(2) > input:nth-of-type(1)"
+  },
+  {
+   "ref": 3,
+   "role": "button",
+   "name": "Clear",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    438.125,
+    128.0,
+    47.859375,
+    21
+   ],
+   "tag": "input",
+   "name_source": "content",
+   "value": "",
+   "row_label": "",
+   "row_cells": [
+    "",
+    ""
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(2) > input:nth-of-type(2)"
+  },
+  {
+   "ref": 4,
+   "role": "link",
+   "name": "Home",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    68.0,
+    46.828125,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Home",
+   "row_cells": [
+    "Home"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/home",
+   "css": "body > font > table > tbody > tr:nth-of-type(3) > td > a"
+  },
+  {
+   "ref": 5,
+   "role": "link",
+   "name": "Member Lookup",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    93.0,
+    128.421875,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Member Lookup",
+   "row_cells": [
+    "Member Lookup"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/members",
+   "css": "body > font > table > tbody > tr:nth-of-type(4) > td > a"
+  },
+  {
+   "ref": 6,
+   "role": "link",
+   "name": "Reports",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    118.0,
+    61.421875,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Reports",
+   "row_cells": [
+    "Reports"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/main/reports",
+   "css": "body > font > table > tbody > tr:nth-of-type(5) > td > a"
+  },
+  {
+   "ref": 7,
+   "role": "link",
+   "name": "Sign Out",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    7.0,
+    167.0,
+    70.078125,
+    19
+   ],
+   "tag": "a",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Sign Out",
+   "row_cells": [
+    "Sign Out"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "/logout",
+   "css": "body > font > table > tbody > tr:nth-of-type(7) > td > a"
+  },
+  {
+   "ref": 8,
+   "role": "heading",
+   "name": "Member Lookup",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    189.0,
+    56.0,
+    161.375,
+    22
+   ],
+   "tag": "b",
+   "name_source": "content",
+   "value": "",
+   "row_label": "",
+   "row_cells": [],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(1) > td > font > b"
+  },
+  {
+   "ref": 9,
+   "role": "cell",
+   "name": "MERIDIAN CORE SERVICING",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    180.0,
+    8.0,
+    789.4375,
+    23
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "MERIDIAN CORE SERVICING",
+   "row_cells": [
+    "MERIDIAN CORE SERVICING",
+    "Release 4.2.117 |"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(1) > tbody > tr > td:nth-of-type(1)"
+  },
+  {
+   "ref": 10,
+   "role": "cell",
+   "name": "Release 4.2.117 |",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    969.4375,
+    8.0,
+    302.5625,
+    23
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "MERIDIAN CORE SERVICING",
+   "row_cells": [
+    "MERIDIAN CORE SERVICING",
+    "Release 4.2.117 |"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(1) > tbody > tr > td:nth-of-type(2)"
+  },
+  {
+   "ref": 11,
+   "role": "cell",
+   "name": "Member Number",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    183.0,
+    86.0,
+    172,
+    33
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Member Number",
+   "row_cells": [
+    "Member Number",
+    ""
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(2) > td:nth-of-type(1)"
+  },
+  {
+   "ref": 12,
+   "role": "cell",
+   "name": "Enter the numeric member number exactly as printed on the member card.",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    183.0,
+    157.0,
+    1086,
+    24
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Enter the numeric member number exactly as printed on the member card.",
+   "row_cells": [
+    "Enter the numeric member number exactly as printed on the member card."
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(4) > td"
+  },
+  {
+   "ref": 13,
+   "role": "cell",
+   "name": "Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+   "frame": [
+    "main"
+   ],
+   "bbox": [
+    182.0,
+    202.0,
+    1088,
+    14
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Meridian Financial Systems (fictional). Unauthorized access is prohibited.",
+   "row_cells": [
+    "Meridian Financial Systems (fictional). Unauthorized access is prohibited."
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table:nth-of-type(3) > tbody > tr > td"
+  },
+  {
+   "ref": 14,
+   "role": "cell",
+   "name": "Signed in: operator1",
+   "frame": [
+    "nav"
+   ],
+   "bbox": [
+    4.0,
+    4.0,
+    162,
+    37
+   ],
+   "tag": "td",
+   "name_source": "content",
+   "value": "",
+   "row_label": "Signed in: operator1",
+   "row_cells": [
+    "Signed in: operator1"
+   ],
+   "col_header": "",
+   "placeholder": "",
+   "options": [],
+   "disabled": false,
+   "form_action": "",
+   "css": "body > font > table > tbody > tr:nth-of-type(1) > td"
+  }
+ ],
+ "http_status": 200,
+ "frames": [
+  [],
+  [
+   "nav"
+  ],
+  [
+   "main"
+  ]
+ ],
+ "taken_at": "2026-09-12T08:06:01+00:00"
+}
