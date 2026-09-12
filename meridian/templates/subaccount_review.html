@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c1" width="100%" cellpadding="6">
+<tr><td colspan="2"><font size="4"><b>Review New Sub-Account</b></font></td></tr>
+<tr><td width="160">Member</td><td>{{ member_id }} &nbsp; {{ m.name }}</td></tr>
+<tr><td>Product</td><td>{{ form.product }}</td></tr>
+<tr><td>Nickname</td><td>{{ form.nickname }}</td></tr>
+<tr><td>Initial Deposit</td><td>${{ form.deposit }}</td></tr>
+<tr><td colspan="2" class="c3">Opening a sub-account posts to the core immediately and cannot be undone from this screen.</td></tr>
+<form method="post" action="/main/members/{{ member_id }}/subaccounts/open">
+<input type="hidden" name="product" value="{{ form.product }}">
+<input type="hidden" name="nickname" value="{{ form.nickname }}">
+<input type="hidden" name="deposit" value="{{ form.deposit }}">
+<tr><td></td><td><button type="submit">Confirm Open</button> &nbsp; <a href="/main/members/{{ member_id }}/subaccounts/new">Back</a></td></tr>
+</form>
+</table>
+{% endblock %}

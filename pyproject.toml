@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "teller"
+version = "0.1.0"
+description = "Record-once, replay-many UI automation for back-office apps that have no API"
+requires-python = ">=3.11"
+dependencies = [
+    "playwright>=1.45",
+    "pydantic>=2.5",
+    "anthropic>=0.40",
+    "flask>=3.0",
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pytest-timeout>=2.3"]
+
+[project.scripts]
+teller = "teller.cli:main"
+meridian = "meridian.app:main"
+
+[tool.setuptools.packages.find]
+include = ["teller*", "meridian*"]
+
+[tool.setuptools.package-data]
+teller = ["profiles/*.yaml", "surface/*.js"]
+meridian = ["templates/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["e2e: needs a browser and the meridian dev server"]
+timeout = 180

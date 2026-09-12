@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c3" width="100%" cellpadding="6">
+<tr><td><font size="4"><b>Security Alert</b></font></td></tr>
+<tr><td>Your password will expire in 3 days. Passwords must be changed every 90 days per institution policy.</td></tr>
+<form method="post" action="/main/surprise/later">
+<input type="hidden" name="next" value="{{ next }}">
+<tr><td><a href="/main/surprise/change">Change Password Now</a> &nbsp; <input type="submit" value="Remind Me Later"></td></tr>
+</form>
+</table>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c1" width="100%" cellpadding="6">
+<tr><td colspan="2"><font size="4"><b>Member Lookup</b></font></td></tr>
+{% if error %}
+<tr><td colspan="2" class="c4">{{ error }}</td></tr>
+{% endif %}
+<form method="post" action="/main/members/search">
+<tr><td width="160">Member Number</td><td><input type="text" name="memberno" size="12" value="{{ query }}"></td></tr>
+<tr><td></td><td><input type="submit" value="Search"> &nbsp; <input type="reset" value="Clear"></td></tr>
+</form>
+<tr><td colspan="2"><font size="1" color="#666">Enter the numeric member number exactly as printed on the member card.</font></td></tr>
+</table>
+{% endblock %}

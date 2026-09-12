@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c1" width="100%" cellpadding="6">
+<tr><td colspan="2"><font size="4"><b>Member Profile</b></font></td></tr>
+<tr><td width="160">Member Number</td><td>{{ member_id }}</td></tr>
+<tr><td>Name</td><td>{{ m.name }}</td></tr>
+<tr><td>Member Since</td><td>{{ m.since }}</td></tr>
+<tr><td>SSN</td><td>***-**-{{ m.ssn_last4 }}</td></tr>
+<tr><td>Address</td><td>{{ m.address }}</td></tr>
+</table>
+<br>
+<table class="c1" width="100%" cellpadding="6">
+<tr><td colspan="5"><font size="4"><b>Accounts</b></font></td></tr>
+<tr class="c2"><td><b>Account</b></td><td><b>Type</b></td><td><b>Status</b></td><td align="right"><b>Current Balance</b></td><td align="right"><b>Available</b></td></tr>
+{% for a in m.accounts %}
+<tr><td>{{ a.number }}</td><td>{{ a.type }}{% if a.nickname %} ({{ a.nickname }}){% endif %}</td><td>{{ a.status }}</td><td align="right">${{ a.balance }}</td><td align="right">${{ a.available }}</td></tr>
+{% endfor %}
+</table>
+<br>
+<table border="0"><tr>
+<td><a href="/main/members/{{ member_id }}/subaccounts/new">New Sub-Account</a></td>
+<td>&nbsp;|&nbsp;</td>
+<td><a href="/main/members">Back to Lookup</a></td>
+</tr></table>
+{% endblock %}

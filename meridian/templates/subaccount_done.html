@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c1" width="100%" cellpadding="6">
+<tr><td colspan="2"><font size="4"><b>Sub-Account Opened</b></font></td></tr>
+<tr><td colspan="2" class="c5">Sub-account <b>{{ acct.number }}</b> ({{ acct.nickname }}) has been opened for {{ m.name }} with an initial deposit of ${{ acct.balance }}.</td></tr>
+<tr><td width="160">Account Number</td><td>{{ acct.number }}</td></tr>
+<tr><td>Type</td><td>{{ acct.type }}</td></tr>
+<tr><td>Status</td><td>{{ acct.status }}</td></tr>
+<tr><td colspan="2"><a href="/main/members/{{ member_id }}">Return to Member Profile</a></td></tr>
+</table>
+{% endblock %}

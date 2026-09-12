@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c1" width="100%" cellpadding="6">
+<tr><td colspan="2"><font size="4"><b>New Sub-Account</b></font></td></tr>
+<tr><td width="160">Member</td><td>{{ member_id }} &nbsp; {{ m.name }}</td></tr>
+{% if error %}
+<tr><td colspan="2" class="c4">{{ error }}</td></tr>
+{% endif %}
+<form method="post" action="/main/members/{{ member_id }}/subaccounts/review">
+<tr><td>Product</td><td><select name="product">
+{% for p in products %}<option value="{{ p }}" {% if form.product == p %}selected{% endif %}>{{ p }}</option>{% endfor %}
+</select></td></tr>
+<tr><td>Nickname</td><td><input type="text" name="nickname" size="30" value="{{ form.nickname }}"></td></tr>
+<tr><td>Initial Deposit</td><td>$ <input type="text" name="deposit" size="10" value="{{ form.deposit }}"></td></tr>
+<tr><td></td><td><input type="submit" value="Review"> &nbsp; <a href="/main/members/{{ member_id }}">Cancel</a></td></tr>
+</form>
+</table>
+{% endblock %}

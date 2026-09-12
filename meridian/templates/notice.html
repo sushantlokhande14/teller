@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block body %}
+<table class="c3" width="100%" cellpadding="6">
+<tr><td><font size="4"><b>System Notice</b></font></td></tr>
+<tr><td>Scheduled maintenance window Saturday 02:00 to 04:00 ET. Some reports may be unavailable during that time.</td></tr>
+<form method="post" action="/main/notice/ack">
+<input type="hidden" name="next" value="{{ next }}">
+<tr><td><input type="submit" value="Acknowledge"></td></tr>
+</form>
+</table>
+{% endblock %}
