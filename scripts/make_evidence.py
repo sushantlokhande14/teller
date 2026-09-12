@@ -16,6 +16,7 @@ import os
 import shutil
 import subprocess
 import sys
+import time
 import urllib.request
 from pathlib import Path
 
@@ -75,6 +76,22 @@ def reset_app(base_url: str) -> None:
         urllib.request.urlopen(urllib.request.Request(base_url + path, data=data), timeout=5).read()
 
 
+def start_variant(name: str, port: int) -> subprocess.Popen:
+    """A second deployment of the same product, for the cross-tenant run."""
+    env = {**os.environ, "MERIDIAN_VARIANT": name, "MERIDIAN_PORT": str(port)}
+    proc = subprocess.Popen([sys.executable, "-m", "meridian"], cwd=ROOT, env=env,
+                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    url = f"http://127.0.0.1:{port}"
+    for _ in range(40):
+        try:
+            urllib.request.urlopen(url + "/login", timeout=2).read()
+            return proc
+        except Exception:
+            time.sleep(0.25)
+    proc.terminate()
+    raise RuntimeError(f"the {name} variant did not come up on {port}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--scripted", action="store_true", help="use the scripted stand-in model instead of an LLM")
@@ -122,7 +139,17 @@ def main() -> int:
        "--operator", "scripts/operator_dismiss_alert.json")
     keep("replay-escalation-unknown-screen", "unknown alert; a person takes the live session over CDP and hands it back", index)
 
-    # 3. a risky capability: opening a sub-account posts to the core
+    # 3. the same capability against a second institution running the same product
+    variant = start_variant("summit", 5058)
+    try:
+        sh("replay", "capabilities/member_savings_balance.json", "--input", "member_id=101502",
+           "--tenant", "tenants/summit-credit-union.yaml")
+        keep("replay-second-tenant", "same artifact, different institution: overlay absorbs the renamed "
+             "content frame and a branded banner, a locator fallback absorbs a renamed menu item, drift is flagged", index)
+    finally:
+        variant.terminate()
+
+    # 4. a risky capability: opening a sub-account posts to the core
     if args.scripted:
         model_args = ["--scripted", "scripts/scripted_model_subaccount.json"]
     code, _ = sh("discover", "contracts/open_savings_subaccount.json", "--input", "member_id=100234",
@@ -138,6 +165,14 @@ def main() -> int:
         sh("replay", "capabilities/open_savings_subaccount.json", "--input", "member_id=100877",
            "--input", "nickname=Holiday", "--input", "deposit=10.00", "--operator", "scripts/operator_decline.json")
         keep("replay-risky-declined", "operator declines; run stops before anything is posted", index)
+
+    # the animations in the README are built from these runs, so they stay in step
+    for run, gif, extra in (("discovery-member-savings-balance", "discovery.gif", ["--ms", "2400"]),
+                            ("replay-escalation-unknown-screen", "escalation.gif", []),
+                            ("replay-second-tenant", "second-tenant.gif", [])):
+        if (EVIDENCE / run).exists():
+            subprocess.run([sys.executable, "scripts/make_filmstrip.py", str(EVIDENCE / run),
+                            f"docs/{gif}", "--width", "880", *extra], cwd=ROOT)
 
     model_note = ("the scripted stand-in model (pipeline check only)" if args.scripted
                   else f"{args.model or 'the default model'}" + (f" on {args.provider}" if args.provider else ""))

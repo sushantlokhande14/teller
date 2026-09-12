@@ -25,22 +25,17 @@
       "type": "money",
       "description": "Current balance of the member's Savings account",
       "source": {
-        "describe": "the 'Current Balance' cell of the row '{member_id}-S01' in the main frame",
+        "describe": "the 'Current Balance' cell of the row '{member_id}-S01' in the content frame",
         "role": "cell",
         "name": "$4,812.55",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
             "strategy": "table_cell",
             "value": "{\"row\": \"Savings\", \"column\": \"Current Balance\"}",
             "note": "the row containing 'Savings', under the 'Current Balance' column"
-          },
-          {
-            "strategy": "row_label",
-            "value": "{member_id}-S01",
-            "note": "label in the first cell of the same table row; how legacy forms are laid out"
           },
           {
             "strategy": "css",
@@ -60,11 +55,11 @@
       "type": "string",
       "description": "The member's full name as shown on the profile",
       "source": {
-        "describe": "the value next to 'Name' in the main frame",
+        "describe": "the value next to 'Name' in the content frame",
         "role": "cell",
         "name": "Priya Natarajan",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -128,17 +123,17 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "Navigate to the Member Lookup page."
+      "why": "Navigate to the Member Lookup section"
     },
     {
       "id": "s2",
       "action": "type",
       "target": {
-        "describe": "the 'Member Number' textbox in the main frame",
+        "describe": "the 'Member Number' textbox in the content frame",
         "role": "textbox",
         "name": "Member Number",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -172,12 +167,41 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "Enter the member number to search for."
+      "why": "Enter the member number 100234 to look up the member"
     },
     {
       "id": "s3",
-      "action": "press",
-      "key": "Enter",
+      "action": "click",
+      "target": {
+        "describe": "the 'Search' button in the content frame",
+        "role": "button",
+        "name": "Search",
+        "frame": [
+          "@main"
+        ],
+        "locators": [
+          {
+            "strategy": "role",
+            "value": "Search",
+            "note": "ARIA role plus accessible name, the way a screen reader finds it"
+          },
+          {
+            "strategy": "text",
+            "value": "Search",
+            "note": "exact visible text"
+          },
+          {
+            "strategy": "css",
+            "value": "body > font > table:nth-of-type(2) > tbody > tr:nth-of-type(3) > td:nth-of-type(2) > input:nth-of-type(1)",
+            "note": "structural path; brittle, last resort"
+          },
+          {
+            "strategy": "bbox",
+            "value": "[363, 128, 58, 21]",
+            "note": "screen position at recording time; only used when policy allows coordinate fallback"
+          }
+        ]
+      },
       "on_url": "/main/members",
       "expect": {
         "url": "/main/members/{member_id}",
@@ -185,7 +209,7 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "submit the form with Enter"
+      "why": "Submit the search with the entered member number"
     }
   ],
   "success": {
@@ -196,13 +220,13 @@
   "outcomes": [],
   "risk": "safe",
   "provenance": {
-    "recorded_at": "2026-09-12T08:05:52+00:00",
+    "recorded_at": "2026-09-12T08:43:34+00:00",
     "model": "qwen2.5:7b",
     "endpoint": "http://127.0.0.1:11434/v1",
-    "discovery_run": "discovery-20260912-080532-2318",
+    "discovery_run": "discovery-20260912-084300-78b9",
     "teller_version": "0.1.0",
     "approved_by": "sushant",
-    "approved_at": "2026-09-12T08:05:53+00:00",
-    "approved_fingerprint": "ad474901f2cd1165"
+    "approved_at": "2026-09-12T08:43:35+00:00",
+    "approved_fingerprint": "89bff18a2eaf4859"
   }
 }

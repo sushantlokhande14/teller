@@ -6,7 +6,7 @@ Each folder is a complete run directory: `log.jsonl` (every observation, decisio
 
 | run | what it shows | result |
 |---|---|---|
-| [discovery-member-savings-balance](discovery-member-savings-balance/) | LLM-driven run that recorded the capability | success after 2 actions (qwen2.5:7b) {"savings_balance": "$4,812.55", "member_name": "Priya Natarajan"} |
+| [discovery-member-savings-balance](discovery-member-savings-balance/) | LLM-driven run that recorded the capability | success after 3 actions (qwen2.5:7b) {"savings_balance": "$4,812.55", "member_name": "Priya Natarajan"} |
 | [replay-success](replay-success/) | different member than the recording; Savings sits in a different table row | success {"savings_balance": "12000.00", "member_name": "Elena Ruiz"} |
 | [replay-outcome-not-found](replay-outcome-not-found/) | a member that does not exist | outcome not_found: No member found for number 999999. |
 | [replay-bad-input](replay-bad-input/) | input rejected by the contract before the app is touched | failure bad_input at None: input 'member_id' does not match '^\\d{6}$' |
@@ -16,6 +16,7 @@ Each folder is a complete run directory: `log.jsonl` (every observation, decisio
 | [replay-fault-permission](replay-fault-permission/) | permission denial surfaced as an outcome | outcome permission_denied: You do not have permission to view /main/members. |
 | [replay-fault-error](replay-fault-error/) | application error stops the run with a screenshot and snapshot | failure fatal_condition at s1: Reference: ORA-01555 snapshot too old. |
 | [replay-escalation-unknown-screen](replay-escalation-unknown-screen/) | unknown alert; a person takes the live session over CDP and hands it back | success {"savings_balance": "4812.55", "member_name": "Priya Natarajan"} | handoff unknown_state -> resumed |
+| [replay-second-tenant](replay-second-tenant/) | same artifact, different institution: overlay absorbs the renamed content frame and a branded banner, a locator fallback absorbs a renamed menu item, drift is flagged | success {"savings_balance": "12000.00", "member_name": "Elena Ruiz"} |
 | [discovery-open-savings-subaccount](discovery-open-savings-subaccount/) | LLM-driven run; the confirm click needed operator approval | success after 6 actions (qwen2.5:7b) {"account_number": "100234-S02"} |
 | [replay-risky-approved](replay-risky-approved/) | operator approves the confirm step; new account number returned | success {"account_number": "100234-S03"} | handoff approval -> resumed |
 | [replay-risky-declined](replay-risky-declined/) | operator declines; run stops before anything is posted | failure operator_abort at s8: declined: the deposit amount on the review screen does not match the request | handoff approval -> aborted |

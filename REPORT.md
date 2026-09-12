@@ -59,8 +59,9 @@ No queue, no service, and a person could do the operator's job with a text edito
 Deliberate trade-offs: Playwright because role-based locators are the closest thing to
 "what a person sees" a browser offers; a single process because the brief says scaling
 infrastructure is not the point; a local sample app (`meridian/`) rather than a public
-site, because I wanted framesets, table layouts, quirks mode, and injectable session
-expiry, permission denials, slow loads and application errors.
+site, because I wanted framesets, table layouts, quirks mode, injectable session expiry,
+permission denials, slow loads and application errors, and a second deployment of the
+same product to test reuse against.
 
 ## 2. Artifact schema
 
@@ -187,16 +188,29 @@ signature and `Checkpoint` would grow one optional field.
   frame holds content, the taxonomy of known screens;
 * the *capability* is recorded against a profile, not a tenant, and holds no URLs,
   credentials or tenant-specific text;
-* the *tenant overlay* (`tenants/example-credit-union.yaml`) is the diff: base URL,
-  version, a different sign-in form, an extra branded interstitial. Overlay conditions
+* the *tenant overlay* (`tenants/summit-credit-union.yaml`) is the diff: base URL,
+  version, a renamed content frame, an extra branded interstitial. Overlay conditions
   replace base conditions with the same id, so a tenant whose session expiry looks
   different swaps one entry rather than re-recording.
 
-Per-tenant drift shows up as `drift` and recovered steps in replay results. Across
-many tenants the signal I would collect per (capability, tenant, version) is which
-locator strategy was used per step and how often a fallback was needed: a tenant whose
-primary locators keep missing needs an overlay, not a re-recording. The fields exist
-in every result today; the storage and reporting around them do not.
+One artifact refers to the content frame as `@main` rather than by the name this
+instance happens to use, so an integrator who renamed or re-nested that frame is an
+overlay line, not a re-recording. That symbolic reference is the smallest change that
+made the tenant story real rather than asserted.
+
+This is demonstrated rather than argued: the sample app also runs as Summit Credit
+Union, a second institution on the same product with its own branding, release 4.4.02,
+a content frame named `content`, a welcome banner after sign-in, and one renamed menu
+item. `evidence/replay-second-tenant/` is the capability recorded against the base
+deployment, replayed unchanged against Summit. The overlay absorbs the host, the frame
+name and the banner. The renamed menu item is absorbed one level down, by the locator
+fallbacks: the role and text locators miss, a structural locator holds, and the result
+marks that step `drift` with `locator_used: css`. That is the signal worth acting on.
+It says this tenant is running on a last-resort locator and needs an overlay entry
+before the structure moves, rather than waiting for a production break to find out.
+Across many tenants the thing to collect per (capability, tenant, version) is exactly
+that pair, which strategy was used and how often a fallback was needed. The fields are
+in every result today; the storage and reporting around them are not built.
 
 ## 5. Escalation & handoff
 
@@ -264,8 +278,9 @@ operator can.
 ## 7. Cuts
 
 * **Desktop surface.** Designed for (section 4), not implemented.
-* **Tenant fleet tooling.** Overlays and the per-step drift signal exist; storing and
-  reporting results across runs does not.
+* **Tenant fleet tooling.** Overlays and the per-step drift signal exist and are
+  demonstrated on a second institution; storing and reporting those signals across many
+  runs does not.
 * **Operator console.** A terminal plus CDP. A web console would read the same files
   and attach to the same endpoint.
 * **Screenshot masking**, as described in section 6.

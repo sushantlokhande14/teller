@@ -2,7 +2,7 @@
   "status": "success",
   "capability": "member_savings_balance",
   "version": 1,
-  "run_id": "replay-20260912-080630-d9d6",
+  "run_id": "replay-20260912-084420-b94a",
   "inputs": {
     "member_id": "100234"
   },
@@ -29,15 +29,16 @@
       "locator_used": "row_label",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 875
+      "duration_ms": 906
     },
     {
       "id": "s3",
       "status": "ok",
       "attempts": 1,
+      "locator_used": "role",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 843
+      "duration_ms": 889
     }
   ],
   "handoffs": [
@@ -46,29 +47,29 @@
       "reason": "unexpected screen at step s1: heading is 'Security Alert', expected 'Member Lookup'",
       "kind": "unknown_state",
       "step_id": "s1",
-      "requested_at": "2026-09-12T08:06:42+00:00",
-      "resolved_at": "2026-09-12T08:06:44+00:00",
+      "requested_at": "2026-09-12T08:44:32+00:00",
+      "resolved_at": "2026-09-12T08:44:34+00:00",
       "resolution": "resumed",
       "operator_note": "password expiry alert; chose Remind Me Later so the run can continue",
       "human_actions": [
         {
-          "at": "2026-09-12T08:06:43.627Z",
+          "at": "2026-09-12T08:44:33.303Z",
           "kind": "click",
           "detail": "input \"Remind Me Later\" in frame main"
         },
         {
-          "at": "2026-09-12T08:06:43.627Z",
+          "at": "2026-09-12T08:44:33.303Z",
           "kind": "submit",
           "detail": "form action=\"/main/surprise/later\""
         },
         {
-          "at": "2026-09-12T08:06:43.858Z",
+          "at": "2026-09-12T08:44:33.610Z",
           "kind": "navigate",
           "detail": "main -> /main/members"
         }
       ]
     }
   ],
-  "duration_ms": 15813,
-  "run_dir": "runs\\replay-20260912-080630-d9d6"
+  "duration_ms": 15655,
+  "run_dir": "runs\\replay-20260912-084420-b94a"
 }

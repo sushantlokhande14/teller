@@ -1,0 +1,47 @@
+{
+  "status": "success",
+  "capability": "member_savings_balance",
+  "version": 1,
+  "run_id": "replay-20260912-084438-d730",
+  "inputs": {
+    "member_id": "101502"
+  },
+  "outputs": {
+    "savings_balance": "12000.00",
+    "member_name": "Elena Ruiz"
+  },
+  "steps": [
+    {
+      "id": "s1",
+      "status": "recovered",
+      "attempts": 2,
+      "locator_used": "css",
+      "drift": true,
+      "recoveries": [
+        "welcome_banner"
+      ],
+      "duration_ms": 1500
+    },
+    {
+      "id": "s2",
+      "status": "ok",
+      "attempts": 1,
+      "locator_used": "row_label",
+      "drift": false,
+      "recoveries": [],
+      "duration_ms": 905
+    },
+    {
+      "id": "s3",
+      "status": "ok",
+      "attempts": 1,
+      "locator_used": "css",
+      "drift": true,
+      "recoveries": [],
+      "duration_ms": 922
+    }
+  ],
+  "handoffs": [],
+  "duration_ms": 4764,
+  "run_dir": "runs\\replay-20260912-084438-d730"
+}

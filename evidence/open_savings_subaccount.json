@@ -39,11 +39,11 @@
       "type": "string",
       "description": "The new sub-account number shown on the confirmation screen",
       "source": {
-        "describe": "the value next to 'Account Number' in the main frame",
+        "describe": "the value next to 'Account Number' in the content frame",
         "role": "cell",
         "name": "{member_id}-S02",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -107,17 +107,17 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "Navigate to the member lookup screen to locate member 100234."
+      "why": "Navigate to Member Lookup to open a new Savings sub-account."
     },
     {
       "id": "s2",
       "action": "type",
       "target": {
-        "describe": "the 'Member Number' textbox in the main frame",
+        "describe": "the 'Member Number' textbox in the content frame",
         "role": "textbox",
         "name": "Member Number",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -151,7 +151,7 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "Enter member ID 100234 and search."
+      "why": "Search for member 100234."
     },
     {
       "id": "s3",
@@ -170,11 +170,11 @@
       "id": "s4",
       "action": "click",
       "target": {
-        "describe": "the 'New Sub-Account' link in the main frame",
+        "describe": "the 'New Sub-Account' link in the content frame",
         "role": "link",
         "name": "New Sub-Account",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -206,17 +206,17 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "Open the form to create a new sub-account for member 100234."
+      "why": "Open the New Sub-Account form to create a new savings sub-account."
     },
     {
       "id": "s5",
       "action": "type",
       "target": {
-        "describe": "the 'Nickname' textbox in the main frame",
+        "describe": "the 'Nickname' textbox in the content frame",
         "role": "textbox",
         "name": "Nickname",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -250,17 +250,17 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "Enter the nickname Vacation fund for the new sub-account."
+      "why": "Enter the nickname for the new sub-account."
     },
     {
       "id": "s6",
       "action": "type",
       "target": {
-        "describe": "the 'Initial Deposit' textbox in the main frame",
+        "describe": "the 'Initial Deposit' textbox in the content frame",
         "role": "textbox",
         "name": "Initial Deposit",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -294,7 +294,7 @@
         "timeout_ms": 10000
       },
       "risk": "safe",
-      "why": "Enter the initial deposit of 25.00 for the new sub-account."
+      "why": "Enter the initial deposit for the new sub-account."
     },
     {
       "id": "s7",
@@ -313,11 +313,11 @@
       "id": "s8",
       "action": "click",
       "target": {
-        "describe": "the 'Confirm Open' button in the main frame",
+        "describe": "the 'Confirm Open' button in the content frame",
         "role": "button",
         "name": "Confirm Open",
         "frame": [
-          "main"
+          "@main"
         ],
         "locators": [
           {
@@ -349,7 +349,7 @@
         "timeout_ms": 10000
       },
       "risk": "risky",
-      "why": "Confirm the opening of the new sub-account to proceed with the action."
+      "why": "Confirm the opening of the new savings sub-account."
     }
   ],
   "success": {
@@ -360,10 +360,10 @@
   "outcomes": [],
   "risk": "risky",
   "provenance": {
-    "recorded_at": "2026-09-12T08:07:20+00:00",
+    "recorded_at": "2026-09-12T08:45:27+00:00",
     "model": "qwen2.5:7b",
     "endpoint": "http://127.0.0.1:11434/v1",
-    "discovery_run": "discovery-20260912-080647-8368",
+    "discovery_run": "discovery-20260912-084444-f3ae",
     "teller_version": "0.1.0"
   }
 }

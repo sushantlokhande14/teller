@@ -1,10 +1,10 @@
-{"seq": 1, "t_ms": 578, "at": "2026-09-12T08:05:54.196+00:00", "event": "replay.start", "capability": "member_savings_balance", "version": 1, "status": "approved", "fingerprint": "ad474901f2cd1165", "inputs": {"member_id": "101502"}}
-{"seq": 2, "t_ms": 1609, "at": "2026-09-12T08:05:55.230+00:00", "event": "act", "step": "s1", "action": "click", "target": "the 'Member Lookup' link in the nav frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
-{"seq": 3, "t_ms": 2250, "at": "2026-09-12T08:05:55.870+00:00", "event": "checkpoint.ok", "step": "s1", "attempts": 1}
-{"seq": 4, "t_ms": 2438, "at": "2026-09-12T08:05:56.066+00:00", "event": "act", "step": "s2", "action": "type", "target": "the 'Member Number' textbox in the main frame", "strategy": "row_label", "drift": false, "value": "101502", "risk": "safe"}
-{"seq": 5, "t_ms": 3063, "at": "2026-09-12T08:05:56.683+00:00", "event": "checkpoint.ok", "step": "s2", "attempts": 1}
-{"seq": 6, "t_ms": 3234, "at": "2026-09-12T08:05:56.864+00:00", "event": "act", "step": "s3", "action": "press", "target": null, "strategy": null, "drift": false, "value": null, "risk": "safe"}
-{"seq": 7, "t_ms": 3859, "at": "2026-09-12T08:05:57.476+00:00", "event": "checkpoint.ok", "step": "s3", "attempts": 1}
-{"seq": 8, "t_ms": 3891, "at": "2026-09-12T08:05:57.507+00:00", "event": "extract", "output": "savings_balance", "strategy": "table_cell", "drift": false, "value": "12000.00"}
-{"seq": 9, "t_ms": 3906, "at": "2026-09-12T08:05:57.522+00:00", "event": "extract", "output": "member_name", "strategy": "row_label", "drift": false, "value": "Elena Ruiz"}
-{"seq": 10, "t_ms": 4344, "at": "2026-09-12T08:05:57.971+00:00", "event": "replay.end", "status": "success", "outputs": {"savings_balance": "12000.00", "member_name": "Elena Ruiz"}}
+{"seq": 1, "t_ms": 703, "at": "2026-09-12T08:43:37.169+00:00", "event": "replay.start", "capability": "member_savings_balance", "version": 1, "status": "approved", "fingerprint": "89bff18a2eaf4859", "inputs": {"member_id": "101502"}}
+{"seq": 2, "t_ms": 1828, "at": "2026-09-12T08:43:38.289+00:00", "event": "act", "step": "s1", "action": "click", "target": "the 'Member Lookup' link in the nav frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 3, "t_ms": 2514, "at": "2026-09-12T08:43:38.979+00:00", "event": "checkpoint.ok", "step": "s1", "attempts": 1}
+{"seq": 4, "t_ms": 2733, "at": "2026-09-12T08:43:39.192+00:00", "event": "act", "step": "s2", "action": "type", "target": "the 'Member Number' textbox in the content frame", "strategy": "row_label", "drift": false, "value": "101502", "risk": "safe"}
+{"seq": 5, "t_ms": 3436, "at": "2026-09-12T08:43:39.894+00:00", "event": "checkpoint.ok", "step": "s2", "attempts": 1}
+{"seq": 6, "t_ms": 3656, "at": "2026-09-12T08:43:40.110+00:00", "event": "act", "step": "s3", "action": "click", "target": "the 'Search' button in the content frame", "strategy": "role", "drift": false, "value": null, "risk": "safe"}
+{"seq": 7, "t_ms": 4389, "at": "2026-09-12T08:43:40.847+00:00", "event": "checkpoint.ok", "step": "s3", "attempts": 1}
+{"seq": 8, "t_ms": 4453, "at": "2026-09-12T08:43:40.911+00:00", "event": "extract", "output": "savings_balance", "strategy": "table_cell", "drift": false, "value": "12000.00"}
+{"seq": 9, "t_ms": 4483, "at": "2026-09-12T08:43:40.941+00:00", "event": "extract", "output": "member_name", "strategy": "row_label", "drift": false, "value": "Elena Ruiz"}
+{"seq": 10, "t_ms": 5014, "at": "2026-09-12T08:43:41.469+00:00", "event": "replay.end", "status": "success", "outputs": {"savings_balance": "12000.00", "member_name": "Elena Ruiz"}}

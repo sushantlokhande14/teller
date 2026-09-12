@@ -13,6 +13,31 @@ This is my submission for the interface.ai computer-use take-home. The design
 write-up is in [REPORT.md](REPORT.md); the recorded runs are under
 [evidence/](evidence/README.md).
 
+### The model works the flow out once
+
+Red boxes are what the system offers the model: every control it may act on, numbered.
+The caption on each frame is the model's own stated reason, taken from the run log.
+
+![a discovery run](docs/discovery.gif)
+
+### Then the same flow replays with no model, at another institution
+
+Same capability file, never re-recorded. This tenant runs the same vendor product
+with its own branding, a newer release, a content frame the integrator renamed, a
+welcome banner, and a renamed menu item. A tenant overlay of fifteen lines covers
+the first three, a fallback locator covers the last, and the run reports that it
+needed the fallback.
+
+![the same capability at a second institution](docs/second-tenant.gif)
+
+### And stops for a person when it meets something it does not know
+
+![an escalation](docs/escalation.gif)
+
+Every frame above is a screenshot the run itself saved, captioned from its own log.
+Nothing is staged: `python scripts/make_filmstrip.py runs/<run id> out.gif` rebuilds
+them from any run.
+
 ## What is in the box
 
 | path | what it is |
@@ -25,8 +50,8 @@ write-up is in [REPORT.md](REPORT.md); the recorded runs are under
 | `teller/policy.py`, `policy.yaml` | allowlist, risky-action handling, redaction |
 | `teller/surface/` | how the surface is perceived and acted on (Playwright today) |
 | `teller/profiles/meridian.yaml` | per-app knowledge: sign-in, content frame, the known error screens |
-| `tenants/` | example per-institution overlay |
-| `meridian/` | the target: a fictional legacy core-servicing console (frameset, table layouts, no ids) |
+| `tenants/` | per-institution overlay for a second deployment of the same product |
+| `meridian/` | the target: a fictional legacy core-servicing console (frameset, table layouts, no ids), which can run as either of two institutions |
 | `contracts/` | what the caller declares before discovery: goal, inputs, outputs |
 | `capabilities/` | recorded capabilities |
 | `evidence/` | logs, screenshots and artifacts from discovery and replay runs |
@@ -158,7 +183,25 @@ python -m teller replay capabilities/open_savings_subaccount.json --input member
 python -m teller replay capabilities/open_savings_subaccount.json --input member_id=100877 --input nickname=Holiday --input deposit=10.00 --operator scripts/operator_decline.json
 ```
 
-**7. The catalog an agent would see.**
+**7. A second institution running the same product.** Start the other deployment in a
+third terminal, then replay the capability you already recorded, unchanged, against it.
+
+```bash
+MERIDIAN_VARIANT=summit MERIDIAN_PORT=5058 python -m meridian
+```
+
+```bash
+python -m teller replay capabilities/member_savings_balance.json --input member_id=101502 --tenant tenants/summit-credit-union.yaml
+```
+
+[tenants/summit-credit-union.yaml](tenants/summit-credit-union.yaml) is the whole
+difference: a different host, a newer release, a content frame named `content`
+instead of `main`, and a branded welcome banner to dismiss. The capability is not
+touched. The run succeeds with the same outputs and reports `drift` on the step
+whose menu item this tenant renamed, which is the signal that this tenant needs an
+overlay entry before that step breaks.
+
+**8. The catalog an agent would see.**
 
 ```bash
 python -m teller catalog

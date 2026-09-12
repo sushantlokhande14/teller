@@ -2,7 +2,7 @@
   "status": "success",
   "capability": "member_savings_balance",
   "version": 1,
-  "run_id": "replay-20260912-080615-1108",
+  "run_id": "replay-20260912-084402-3e47",
   "inputs": {
     "member_id": "100234"
   },
@@ -28,18 +28,19 @@
       "locator_used": "row_label",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 796
+      "duration_ms": 938
     },
     {
       "id": "s3",
       "status": "ok",
       "attempts": 1,
+      "locator_used": "role",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 781
+      "duration_ms": 968
     }
   ],
   "handoffs": [],
-  "duration_ms": 7593,
-  "run_dir": "runs\\replay-20260912-080615-1108"
+  "duration_ms": 8328,
+  "run_dir": "runs\\replay-20260912-084402-3e47"
 }

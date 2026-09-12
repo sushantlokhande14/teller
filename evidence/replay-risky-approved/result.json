@@ -2,7 +2,7 @@
   "status": "success",
   "capability": "open_savings_subaccount",
   "version": 1,
-  "run_id": "replay-20260912-080731-8c04",
+  "run_id": "replay-20260912-084539-305c",
   "inputs": {
     "member_id": "100234",
     "nickname": "Rainy day",
@@ -19,7 +19,7 @@
       "locator_used": "role",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 811
+      "duration_ms": 906
     },
     {
       "id": "s2",
@@ -28,7 +28,7 @@
       "locator_used": "row_label",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 860
+      "duration_ms": 875
     },
     {
       "id": "s3",
@@ -36,7 +36,7 @@
       "attempts": 1,
       "drift": false,
       "recoveries": [],
-      "duration_ms": 905
+      "duration_ms": 906
     },
     {
       "id": "s4",
@@ -45,7 +45,7 @@
       "locator_used": "role",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 891
+      "duration_ms": 921
     },
     {
       "id": "s5",
@@ -54,7 +54,7 @@
       "locator_used": "row_label",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 843
+      "duration_ms": 875
     },
     {
       "id": "s6",
@@ -63,7 +63,7 @@
       "locator_used": "row_label",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 860
+      "duration_ms": 890
     },
     {
       "id": "s7",
@@ -71,7 +71,7 @@
       "attempts": 1,
       "drift": false,
       "recoveries": [],
-      "duration_ms": 828
+      "duration_ms": 844
     },
     {
       "id": "s8",
@@ -80,7 +80,7 @@
       "locator_used": "role",
       "drift": false,
       "recoveries": [],
-      "duration_ms": 1436
+      "duration_ms": 1453
     }
   ],
   "handoffs": [
@@ -89,13 +89,13 @@
       "reason": "click on 'Confirm Open' is risky; a person must confirm",
       "kind": "approval",
       "step_id": "s8",
-      "requested_at": "2026-09-12T08:07:39+00:00",
-      "resolved_at": "2026-09-12T08:07:39+00:00",
+      "requested_at": "2026-09-12T08:45:47+00:00",
+      "resolved_at": "2026-09-12T08:45:48+00:00",
       "resolution": "resumed",
       "operator_note": "reviewed the review screen; opening the sub-account is what the caller asked for",
       "human_actions": []
     }
   ],
-  "duration_ms": 8781,
-  "run_dir": "runs\\replay-20260912-080731-8c04"
+  "duration_ms": 9063,
+  "run_dir": "runs\\replay-20260912-084539-305c"
 }

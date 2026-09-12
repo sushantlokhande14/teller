@@ -5,7 +5,7 @@ capability:  member_savings_balance v1
 goal:        Read a member's current savings balance
 url:         /main/members
 heading:     Security Alert
-screenshot:  runs\replay-20260912-080630-d9d6\screens\handoff-h1.png
+screenshot:  runs\replay-20260912-084420-b94a\screens\handoff-h1.png
 cdp_endpoint:http://127.0.0.1:9333
 expected:    url=/main/members; heading='Member Lookup'
 observed:    heading is 'Security Alert', expected 'Member Lookup'
